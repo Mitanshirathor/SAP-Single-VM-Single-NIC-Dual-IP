@@ -467,6 +467,13 @@
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.subnet]"
                         }
+                    },
+                    {
+                        "name": "ipconfig2",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.subnet]"
+                        }
                     }
                 ],
                 "enableAcceleratedNetworking": "[variables('acceleratedNetworking')]"

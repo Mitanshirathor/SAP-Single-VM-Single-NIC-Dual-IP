@@ -465,14 +465,16 @@
                         "name": "ipconfig1",
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
-                            "subnet": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.subnet]"
+                            "subnet": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.subnet]",
+                            "primary": true
                         }
                     },
                     {
                         "name": "ipconfig2",
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
-                            "subnet": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.subnet]"
+                            "subnet": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.subnet]",
+                            "primary": false
                         }
                     }
                 ],

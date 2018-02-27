@@ -74,13 +74,6 @@
                 "description": "The id of the 1st subnet you want to use, in the format /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{virtualNetworkName}/subnets/{subnetName}."
             }
         },
-        "subnetId2": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "The id of the 2nd subnet you want to use, in the format /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{virtualNetworkName}/subnets/{subnetName}."
-            }
-        },
         "_artifactsLocation": {
             "type": "string",
             "metadata": {
@@ -322,7 +315,6 @@
         "vnetName": "[concat(variables('prefix'),variables('sapSystemId'), '-vnet')]",
         "publicIpName": "[concat(variables('prefix'),variables('sapSystemId'), '-pip')]",
         "nicName1": "[concat(variables('prefix'),variables('sapSystemId'), '-nic1')]",
-        "nicName2": "[concat(variables('prefix'),variables('sapSystemId'), '-nic2')]",
         "nsgName": "[concat(variables('prefix'),variables('sapSystemId'), '-nsg')]",
         "subnetName1": "Subnet1",
         "subnetName2": "Subnet2",
@@ -331,7 +323,6 @@
         "nestedDeploymentNameVnet": "[concat(variables('nestedDeploymentName'), 'vnet')]",
         "nestedDeploymentNameNSG": "[concat(variables('nestedDeploymentName'), 'nsg')]",
         "nestedDeploymentNameNIC1": "[concat(variables('nestedDeploymentName'), 'nic1')]",
-        "nestedDeploymentNameNIC2": "[concat(variables('nestedDeploymentName'), 'nic2')]",
         "nestedDeploymentNamePIP": "[concat(variables('nestedDeploymentName'), 'pip')]",
         "osDiskType": "image"
     },
@@ -394,35 +385,6 @@
                     },
                     "subnetId": {
                         "value": "[parameters('subnetId1')]"
-                    }
-                }
-            }
-        },
-        {
-            "apiVersion": "2017-05-10",
-            "name": "[variables('nestedDeploymentNameNIC2')]",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/shared/nic-config.json', parameters('_artifactsLocationSasToken'))]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "vnetName": {
-                        "value": "[variables('vnetName')]"
-                    },
-                    "subnetName": {
-                        "value": "[variables('subnetName2')]"
-                    },
-                    "publicIpName": {
-                        "value": "[variables('publicIpName')]"
-                    },
-                    "nsgName": {
-                        "value": "[variables('nsgName')]"
-                    },
-                    "subnetId": {
-                        "value": "[parameters('subnetId2')]"
                     }
                 }
             }
@@ -511,37 +473,12 @@
             }
         },
         {
-            "type": "Microsoft.Network/networkInterfaces",
-            "name": "[variables('nicName2')]",
-            "apiVersion": "2017-10-01",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameVnet'))]",
-                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNIC2'))]",
-                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNSG'))]"
-            ],
-            "properties": {
-                "networkSecurityGroup": "[reference(variables('nestedDeploymentNameNIC2')).outputs.selectedConfiguration.value.networkSecurityGroup]",
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig1",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "subnet": "[reference(variables('nestedDeploymentNameNIC2')).outputs.selectedConfiguration.value.subnet]"
-                        }
-                    }
-                ],
-                "enableAcceleratedNetworking": "[variables('acceleratedNetworking')]"
-            }
-        },
-        {
             "apiVersion": "2017-05-10",
             "name": "[variables('nestedDeploymentName')]",
             "type": "Microsoft.Resources/deployments",
             "dependsOn": [
                 "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameProf'))]",
-                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName1'))]",
-                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName2'))]"
+                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName1'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -585,9 +522,6 @@
                     },
                     "nicName1": {
                         "value": "[variables('nicName1')]"
-                    },
-                    "nicName2": {
-                        "value": "[variables('nicName2')]"
                     },
                     "dataDisksObj": {
                         "value": {

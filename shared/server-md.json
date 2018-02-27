@@ -86,12 +86,6 @@
         "description": "Name of the network interface 1."
       }
     },
-    "nicName2": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the network interface 2."
-      }
-    },
     "dataDisksObj": {
       "type": "object",
       "metadata": {
@@ -136,13 +130,6 @@
           "properties":
           {
             "primary": true
-          }
-        },
-        {
-          "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('nicName2'))]",
-          "properties":
-          {
-            "primary": false
           }
         }
       ]

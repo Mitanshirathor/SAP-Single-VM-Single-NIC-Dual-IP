@@ -1,0 +1,615 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "subscriptionType": {
+            "type": "string",
+            "allowedValues": [
+                "Dev Test",
+                "Pre-Production",
+                "Production"
+            ],
+            "defaultValue": "Dev Test",
+            "metadata": {
+                "description": "Subscription"
+            }
+        },
+        "sapSystemId": {
+            "type": "string",
+            "maxLength": 7,
+            "metadata": {
+                "description": "SAP System ID (maximum length 7 characters)"
+            }
+        },
+        "osType": {
+            "type": "string",
+            "allowedValues": [
+                "Windows Server 2012 Datacenter",
+                "Windows Server 2012 R2 Datacenter",
+                "Windows Server 2016 Datacenter",
+                "SLES SAP 12-SP1",
+                "SLES SAP BYOS 12-SP1",
+                "SLES SAP 12-SP2",
+                "SLES SAP BYOS 12-SP2",
+                "SLES SAP 12-SP3",
+                "SLES SAP BYOS 12-SP3",
+                "RHEL 7.2",
+                "Oracle Linux 7.2"
+            ],
+            "defaultValue": "SLES SAP 12-SP2",
+            "metadata": {
+                "description": "The type of the operating system you want to deploy."
+            }
+        },
+        "sapSystemSize": {
+            "type": "string",
+            "allowedValues": [
+                "Small Hyperthreaded < 2.000 SAPS",
+                "Medium Hyperthreaded < 9.000 SAPS",
+                "Large Hyperthreaded < 18.000 SAPS",
+                "X-Large Hyperthreaded < 40.000 SAPS"
+            ],
+            "defaultValue": "Medium Hyperthreaded < 9.000 SAPS",
+            "metadata": {
+                "description": "The size of the SAP System you want to deploy."
+            }
+        },
+        "adminUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "Username for the Virtual Machine."
+            }
+        },
+        "adminPassword": {
+            "type": "securestring",
+            "minLength": 12,
+            "metadata": {
+                "description": "Password for the Virtual Machine."
+            }
+        },
+        "subnetId1": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "The id of the 1st subnet you want to use, in the format /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{virtualNetworkName}/subnets/{subnetName}."
+            }
+        },
+        "subnetId2": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "The id of the 2nd subnet you want to use, in the format /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{virtualNetworkName}/subnets/{subnetName}."
+            }
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "metadata": {
+                "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
+            },
+            "defaultValue": "https://raw.githubusercontent.com/simonhutson/sap-2-tier-marketplace-image-md/master/"
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring",
+            "metadata": {
+                "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
+            },
+            "defaultValue": ""
+        }
+    },
+    "variables": {
+        "subscriptionType": {
+            "Dev Test": {
+                "subscriptionTypePrefix": "d"
+            },
+            "Pre-Production": {
+                "subscriptionTypePrefix": "u"
+            },
+            "Production": {
+                "subscriptionTypePrefix": "p"
+            }
+        },
+        "location": {
+            "uksouth": {
+                "locationPrefix": "su"
+            },
+            "ukwest": {
+                "locationPrefix": "wu"
+            },
+            "westeurope": {
+                "locationPrefix": "we"
+            },
+            "northeurope": {
+                "locationPrefix": "ne"
+            }
+        },
+        "images": {
+            "Windows Server 2012 Datacenter": {
+                "sku": "2012-Datacenter",
+                "offer": "WindowsServer",
+                "publisher": "MicrosoftWindowsServer",
+                "version": "latest",
+                "OSType": "Windows",
+                "Plan": {},
+                "UsePlan": false
+            },
+            "Windows Server 2012 R2 Datacenter": {
+                "sku": "2012-R2-Datacenter",
+                "offer": "WindowsServer",
+                "publisher": "MicrosoftWindowsServer",
+                "version": "latest",
+                "OSType": "Windows",
+                "Plan": {},
+                "UsePlan": false
+            },
+            "Windows Server 2016 Datacenter": {
+                "sku": "2016-Datacenter",
+                "offer": "WindowsServer",
+                "publisher": "MicrosoftWindowsServer",
+                "version": "latest",
+                "OSType": "Windows",
+                "Plan": {},
+                "UsePlan": false
+            },
+            "SLES SAP 12-SP1": {
+                "sku": "12-SP1",
+                "offer": "SLES-SAP",
+                "publisher": "SUSE",
+                "version": "latest",
+                "OSType": "Linux",
+                "Plan": {},
+                "UsePlan": false
+            },
+            "SLES SAP BYOS 12-SP1": {
+                "sku": "12-SP1",
+                "offer": "SLES-SAP-BYOS",
+                "publisher": "SUSE",
+                "version": "latest",
+                "OSType": "Linux",
+                "Plan": {},
+                "UsePlan": false
+            },
+            "SLES SAP 12-SP2": {
+                "sku": "12-SP2",
+                "offer": "SLES-SAP",
+                "publisher": "SUSE",
+                "version": "latest",
+                "OSType": "Linux",
+                "Plan": {},
+                "UsePlan": false
+            },
+            "SLES SAP BYOS 12-SP2": {
+                "sku": "12-SP2",
+                "offer": "SLES-SAP-BYOS",
+                "publisher": "SUSE",
+                "version": "latest",
+                "OSType": "Linux",
+                "Plan": {},
+                "UsePlan": false
+            },
+            "SLES SAP 12-SP3": {
+                "sku": "12-SP3",
+                "offer": "SLES-SAP",
+                "publisher": "SUSE",
+                "version": "latest",
+                "OSType": "Linux",
+                "Plan": {},
+                "UsePlan": false
+            },
+            "SLES SAP BYOS 12-SP3": {
+                "sku": "12-SP3",
+                "offer": "SLES-SAP-BYOS",
+                "publisher": "SUSE",
+                "version": "latest",
+                "OSType": "Linux",
+                "Plan": {},
+                "UsePlan": false
+            },
+            "RHEL 7.2": {
+                "sku": "7.2",
+                "offer": "RHEL",
+                "publisher": "RedHat",
+                "version": "latest",
+                "OSType": "Linux",
+                "Plan": {},
+                "UsePlan": false
+            },
+            "Oracle Linux 7.2": {
+                "sku": "7.2",
+                "offer": "Oracle-Linux",
+                "publisher": "Oracle",
+                "version": "latest",
+                "OSType": "Linux",
+                "Plan": {},
+                "UsePlan": false
+            }
+        },
+        "internalOSType": "[variables('images')[parameters('osType')].OSType]",
+        "csExtension": {
+            "Windows": {
+                "script": "[concat(parameters('_artifactsLocation'), '/shared/configureSAPVM.ps1', parameters('_artifactsLocationSasToken'))]",
+                "scriptCall": "powershell.exe -ExecutionPolicy bypass -File .\\shared\\configureSAPVM.ps1"
+            },
+            "Linux": {
+                "script": "[concat(parameters('_artifactsLocation'), '/shared/configureSAPVM.sh', parameters('_artifactsLocationSasToken'))]",
+                "scriptCall": "sh configureSAPVM.sh"
+            }
+        },
+        "vmSizes": {
+            "Small Hyperthreaded < 2.000 SAPS": {
+                "size": "Standard_D4s_v3",
+                "disks": [
+                    {
+                        "size": 511
+                    },
+                    {
+                        "size": 511
+                    },
+                    {
+                        "size": 127
+                    }
+                ],
+                "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
+                "acceleratedNetworking": false
+            },
+            "Medium Hyperthreaded < 9.000 SAPS": {
+                "size": "Standard_D16s_v3",
+                "disks": [
+                    {
+                        "size": 511
+                    },
+                    {
+                        "size": 511
+                    },
+                    {
+                        "size": 511
+                    },
+                    {
+                        "size": 127
+                    }
+                ],
+                "scriptArgs": " -DBDataLUNS '0,1,2' -DBLogLUNS '3'",
+                "acceleratedNetworking": true
+            },
+            "Large Hyperthreaded < 18.000 SAPS": {
+                "size": "Standard_D32s_v3",
+                "disks": [
+                    {
+                        "size": 1023
+                    },
+                    {
+                        "size": 1023
+                    },
+                    {
+                        "size": 1023
+                    },
+                    {
+                        "size": 511
+                    }
+                ],
+                "scriptArgs": " -DBDataLUNS '0,1,2' -DBLogLUNS '3'",
+                "acceleratedNetworking": true
+            },
+            "X-Large Hyperthreaded < 40.000 SAPS": {
+                "size": "Standard_E64_v3",
+                "disks": [
+                    {
+                        "size": 1023
+                    },
+                    {
+                        "size": 1023
+                    },
+                    {
+                        "size": 1023
+                    },
+                    {
+                        "size": 1023
+                    },
+                    {
+                        "size": 511
+                    }
+                ],
+                "scriptArgs": " -DBDataLUNS '0,1,2,3' -DBLogLUNS '4'",
+                "acceleratedNetworking": true
+            }
+        },
+        "locationPrefix": "[variables('location')[resourceGroup().location].locationPrefix]",
+        "environmentPrefix": "[variables('subscriptionType')[parameters('subscriptionType')].subscriptionTypePrefix]",
+        "prefix": "[concat('az', if(equals(variables('locationPrefix'), ''), 'xx', variables('locationPrefix')),'-',variables('environmentPrefix'),'-')]",
+        "dataDiskSizes": "[variables('vmSizes')[parameters('sapSystemSize')].disks]",
+        "acceleratedNetworking": "[variables('vmSizes')[parameters('sapSystemSize')].acceleratedNetworking]",
+        "sapSystemId": "[toLower(parameters('sapSystemId'))]",
+        "vmName": "[concat(variables('prefix'),variables('sapSystemId'))]",
+        "vnetName": "[concat(variables('prefix'),variables('sapSystemId'), '-vnet')]",
+        "publicIpName": "[concat(variables('prefix'),variables('sapSystemId'), '-pip')]",
+        "nicName1": "[concat(variables('prefix'),variables('sapSystemId'), '-nic1')]",
+        "nicName2": "[concat(variables('prefix'),variables('sapSystemId'), '-nic2')]",
+        "nsgName": "[concat(variables('prefix'),variables('sapSystemId'), '-nsg')]",
+        "subnetName1": "Subnet1",
+        "subnetName2": "Subnet2",
+        "nestedDeploymentName": "nestedTemplate",
+        "nestedDeploymentNameProf": "[concat(variables('nestedDeploymentName'), 'prof')]",
+        "nestedDeploymentNameVnet": "[concat(variables('nestedDeploymentName'), 'vnet')]",
+        "nestedDeploymentNameNSG": "[concat(variables('nestedDeploymentName'), 'nsg')]",
+        "nestedDeploymentNameNIC1": "[concat(variables('nestedDeploymentName'), 'nic1')]",
+        "nestedDeploymentNameNIC2": "[concat(variables('nestedDeploymentName'), 'nic2')]",
+        "nestedDeploymentNamePIP": "[concat(variables('nestedDeploymentName'), 'pip')]",
+        "osDiskType": "image"
+    },
+    "resources": [
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[variables('nestedDeploymentNameVnet')]",
+            "type": "Microsoft.Resources/deployments",
+            "condition": "[equals(length(parameters('subnetId1')), 0)]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), '/shared/newvnet.json', parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vnetName": {
+                        "value": "[variables('vnetName')]"
+                    },
+                    "addressPrefix": {
+                        "value": "10.0.0.0/16"
+                    },
+                    "subnetName1": {
+                        "value": "[variables('subnetName1')]"
+                    },
+                    "subnetName2": {
+                        "value": "[variables('subnetName2')]"
+                    },
+                    "subnetPrefix1": {
+                        "value": "10.0.0.0/24"
+                    },
+                    "subnetPrefix2": {
+                        "value": "10.0.1.0/24"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[variables('nestedDeploymentNameNIC1')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), '/shared/nic-config.json', parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vnetName": {
+                        "value": "[variables('vnetName')]"
+                    },
+                    "subnetName": {
+                        "value": "[variables('subnetName1')]"
+                    },
+                    "publicIpName": {
+                        "value": "[variables('publicIpName')]"
+                    },
+                    "nsgName": {
+                        "value": "[variables('nsgName')]"
+                    },
+                    "subnetId": {
+                        "value": "[parameters('subnetId1')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[variables('nestedDeploymentNameNIC2')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), '/shared/nic-config.json', parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vnetName": {
+                        "value": "[variables('vnetName')]"
+                    },
+                    "subnetName": {
+                        "value": "[variables('subnetName2')]"
+                    },
+                    "publicIpName": {
+                        "value": "[variables('publicIpName')]"
+                    },
+                    "nsgName": {
+                        "value": "[variables('nsgName')]"
+                    },
+                    "subnetId": {
+                        "value": "[parameters('subnetId2')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[variables('nestedDeploymentNameProf')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), '/shared/os-disk-parts-md.json', parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "imageSku": {
+                        "value": "[variables('images')[parameters('osType')].sku]"
+                    },
+                    "imagePublisher": {
+                        "value": "[variables('images')[parameters('osType')].publisher]"
+                    },
+                    "imageOffer": {
+                        "value": "[variables('images')[parameters('osType')].offer]"
+                    },
+                    "osDiskType": {
+                        "value": "[variables('osDiskType')]"
+                    },
+                    "osType": {
+                        "value": "[variables('internalOSType')]"
+                    },
+                    "vmName": {
+                        "value": "[variables('vmName')]"
+                    },
+                    "storageType": {
+                        "value": "Premium_LRS"
+                    },
+                    "managedDiskId": {
+                        "value": ""
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[variables('nestedDeploymentNameNSG')]",
+            "type": "Microsoft.Resources/deployments",
+            "condition": "[equals(length(parameters('subnetId1')), 0)]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), '/shared/newnsg.json', parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "nsgName": {
+                        "value": "[variables('nsgName')]"
+                    },
+                    "osType": {
+                        "value": "[variables('internalOSType')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[variables('nicName1')]",
+            "apiVersion": "2017-10-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameVnet'))]",
+                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNIC1'))]",
+                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNSG'))]"
+            ],
+            "properties": {
+                "networkSecurityGroup": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.networkSecurityGroup]",
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.subnet]"
+                        }
+                    }
+                ],
+                "enableAcceleratedNetworking": "[variables('acceleratedNetworking')]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[variables('nicName2')]",
+            "apiVersion": "2017-10-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameVnet'))]",
+                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNIC2'))]",
+                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNSG'))]"
+            ],
+            "properties": {
+                "networkSecurityGroup": "[reference(variables('nestedDeploymentNameNIC2')).outputs.selectedConfiguration.value.networkSecurityGroup]",
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": "[reference(variables('nestedDeploymentNameNIC2')).outputs.selectedConfiguration.value.subnet]"
+                        }
+                    }
+                ],
+                "enableAcceleratedNetworking": "[variables('acceleratedNetworking')]"
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[variables('nestedDeploymentName')]",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameProf'))]",
+                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName1'))]",
+                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName2'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), '/shared/server-md.json', parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "imageReference": {
+                        "value": "[reference(variables('nestedDeploymentNameProf')).outputs.imageReference.value]"
+                    },
+                    "osDisk": {
+                        "value": "[reference(variables('nestedDeploymentNameProf')).outputs.osDisk.value]"
+                    },
+                    "osDiskType": {
+                        "value": "[variables('osDiskType')]"
+                    },
+                    "vmName": {
+                        "value": "[variables('vmName')]"
+                    },
+                    "vmSize": {
+                        "value": "[variables('vmSizes')[parameters('sapSystemSize')].size]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "csExtensionScript": {
+                        "value": "[variables('csExtension')[variables('internalOSType')].script]"
+                    },
+                    "csExtensionscriptCall": {
+                        "value": "[variables('csExtension')[variables('internalOSType')].scriptCall]"
+                    },
+                    "csExtensionscriptArgs": {
+                        "value": "[variables('vmSizes')[parameters('sapSystemSize')].scriptArgs]"
+                    },
+                    "avSetObj": {
+                        "value": {}
+                    },
+                    "nicName1": {
+                        "value": "[variables('nicName1')]"
+                    },
+                    "nicName2": {
+                        "value": "[variables('nicName2')]"
+                    },
+                    "dataDisksObj": {
+                        "value": {
+                            "copy": [
+                                {
+                                    "name": "dataDisks",
+                                    "count": "[length(variables('dataDiskSizes'))]",
+                                    "input": {
+                                        "lun": "[copyIndex('dataDisks')]",
+                                        "createOption": "Empty",
+                                        "name": "[concat(variables('vmName'),'-datadisk-',padLeft(copyIndex('dataDisks'),2,'0'))]",
+                                        "diskSizeGB": "[variables('dataDiskSizes')[copyIndex('dataDisks')].size]"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "osType": {
+                        "value": "[variables('internalOSType')]"
+                    }
+                }
+            }
+        }
+    ]
+}

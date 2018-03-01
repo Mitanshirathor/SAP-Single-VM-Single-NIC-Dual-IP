@@ -56,8 +56,8 @@
   "resources": [
     {
       "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2017-10-01",
       "name": "[concat(parameters('nsgName'))]",
-      "apiVersion": "2015-06-15",
       "location": "[resourceGroup().location]",
       "properties": {
         "securityRules": "[variables('selectedSecurityRules')]"

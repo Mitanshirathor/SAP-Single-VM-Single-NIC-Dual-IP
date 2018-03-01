@@ -328,9 +328,9 @@
     },
     "resources": [
         {
+            "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
             "name": "[variables('nestedDeploymentNameVnet')]",
-            "type": "Microsoft.Resources/deployments",
             "condition": "[equals(length(parameters('subnetId1')), 0)]",
             "properties": {
                 "mode": "Incremental",
@@ -361,9 +361,9 @@
             }
         },
         {
+            "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
             "name": "[variables('nestedDeploymentNameNIC1')]",
-            "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -390,9 +390,9 @@
             }
         },
         {
+            "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
             "name": "[variables('nestedDeploymentNameProf')]",
-            "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -428,9 +428,9 @@
             }
         },
         {
+            "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
             "name": "[variables('nestedDeploymentNameNSG')]",
-            "type": "Microsoft.Resources/deployments",
             "condition": "[equals(length(parameters('subnetId1')), 0)]",
             "properties": {
                 "mode": "Incremental",
@@ -450,8 +450,8 @@
         },
         {
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[variables('nicName1')]",
             "apiVersion": "2017-10-01",
+            "name": "[variables('nicName1')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameVnet'))]",
@@ -482,9 +482,9 @@
             }
         },
         {
+            "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
             "name": "[variables('nestedDeploymentName')]",
-            "type": "Microsoft.Resources/deployments",
             "dependsOn": [
                 "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameProf'))]",
                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName1'))]"

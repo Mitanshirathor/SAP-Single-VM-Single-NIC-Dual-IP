@@ -180,8 +180,8 @@
   "resources": [
     {
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[parameters('vmName')]",
       "apiVersion": "2017-03-30",
+      "name": "[parameters('vmName')]",
       "location": "[resourceGroup().location]",
       "properties": "[variables('internalProperties')]"
     }

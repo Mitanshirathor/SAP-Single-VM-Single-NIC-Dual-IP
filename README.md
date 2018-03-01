@@ -1,6 +1,6 @@
 # SAP-Single-VM-Single-NIC-Dual-IP
 
-Based on a modified versions of the SAP NetWeaver 2-tier, 2-nic compatible template using a Marketplace image
+Based on the "SAP NetWeaver 2-tier compatible template using a Marketplace image" template - https://github.com/Azure/azure-quickstart-templates/tree/master/sap-2-tier-marketplace-image-md/
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fsimonhutson%2FSAP-Single-VM-Single-NIC-Dual-IP%2Fmaster%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>

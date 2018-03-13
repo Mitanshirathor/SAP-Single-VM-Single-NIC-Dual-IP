@@ -34,6 +34,7 @@
                 "SLES SAP 12-SP3",
                 "SLES SAP BYOS 12-SP3",
                 "RHEL 7.2",
+                "RHEL 7.3",
                 "Oracle Linux 7.2"
             ],
             "defaultValue": "SLES SAP 12-SP2",

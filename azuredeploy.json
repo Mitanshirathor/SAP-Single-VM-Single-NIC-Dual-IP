@@ -344,7 +344,7 @@
         "nestedDeploymentNameNIC1": "[concat(variables('nestedDeploymentName'), 'nic1')]",
         "nestedDeploymentNamePIP": "[concat(variables('nestedDeploymentName'), 'pip')]",
         "osDiskType": "image",
-        "tagServiceName": "[toLower(parameters('tagServiceName'))]",
+        "tagServiceName": "[toUpper(parameters('tagServiceName'))]",
         "tags": {
             "Cost Code ID": "D.4534-02-R01",
             "Environment": "[variables('subscriptionType')[parameters('subscriptionType')].tagEnvironment]",

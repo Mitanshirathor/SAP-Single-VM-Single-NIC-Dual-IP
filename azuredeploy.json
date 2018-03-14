@@ -14,6 +14,12 @@
                 "description": "Subscription"
             }
         },
+        "tagServiceName": {
+            "type": "string",
+            "metadata": {
+                "description": "Service Name tag."
+            }
+        },
         "sapSystemId": {
             "type": "string",
             "maxLength": 7,
@@ -93,13 +99,16 @@
     "variables": {
         "subscriptionType": {
             "Dev Test": {
-                "subscriptionTypePrefix": "d"
+                "subscriptionTypePrefix": "d",
+                "tagEnvironment" :"SAP Dev Test"
             },
             "Pre-Production": {
-                "subscriptionTypePrefix": "u"
+                "subscriptionTypePrefix": "u",
+                "tagEnvironment" :"SAP Pre-Production"
             },
             "Production": {
-                "subscriptionTypePrefix": "p"
+                "subscriptionTypePrefix": "p",
+                "tagEnvironment" :"SAP Production"
             }
         },
         "location": {
@@ -334,7 +343,16 @@
         "nestedDeploymentNameNSG": "[concat(variables('nestedDeploymentName'), 'nsg')]",
         "nestedDeploymentNameNIC1": "[concat(variables('nestedDeploymentName'), 'nic1')]",
         "nestedDeploymentNamePIP": "[concat(variables('nestedDeploymentName'), 'pip')]",
-        "osDiskType": "image"
+        "osDiskType": "image",
+        "tagServiceName": "[toLower(parameters('tagServiceName'))]",
+        "tags": {
+            "Cost Code ID": "D.4534-02-R01",
+            "Environment": "[variables('subscriptionType')[parameters('subscriptionType')].tagEnvironment]",
+            "Service Name": "[variables('tagServiceName')]",
+            "Service Owner": "David Blowers",
+            "Service Ticket Request ID": "CirrusPrj",
+            "Source": "servicenow",
+        }
     },
     "resources": [
         {

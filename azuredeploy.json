@@ -16,6 +16,7 @@
         },
         "tagServiceName": {
             "type": "string",
+            "defaultValue": "SAP Dev Test",
             "metadata": {
                 "description": "Service Name tag."
             }
@@ -86,7 +87,7 @@
             "metadata": {
                 "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
             },
-            "defaultValue": "https://raw.githubusercontent.com/simonhutson/SAP-Single-VM-Single-NIC-Dual-IP/master/"
+            "defaultValue": "https://raw.githubusercontent.com/simonhutson/SAP-Single-VM-Single-NIC-Dual-IP/tags/"
         },
         "_artifactsLocationSasToken": {
             "type": "securestring",
@@ -579,6 +580,9 @@
                     },
                     "osType": {
                         "value": "[variables('internalOSType')]"
+                    },
+                    "tags": {
+                        "value": "[variables('tags')]"
                     }
                 }
             }

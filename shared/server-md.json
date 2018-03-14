@@ -97,6 +97,12 @@
       "metadata": {
         "description": "URL to github templates."
       }
+    },
+    "tags": {
+      "type": "object",
+      "metadata": {
+        "description": "Tags object."
+      }
     }
   },
   "variables": {
@@ -183,6 +189,7 @@
       "apiVersion": "2017-03-30",
       "name": "[parameters('vmName')]",
       "location": "[resourceGroup().location]",
+      "tags": "[parameters('tags')]",
       "properties": "[variables('internalProperties')]"
     }
   ]

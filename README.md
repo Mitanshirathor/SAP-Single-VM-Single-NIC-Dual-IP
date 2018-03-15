@@ -10,10 +10,8 @@ Based on the "SAP NetWeaver 2-tier compatible template using a Marketplace image
 </a>
 
 This template takes a minimum amount of parameters and deploys a VM that is customized for use with SAP NetWeaver, using the latest patched version of the selected operating system. 
-This is a template for a 2-tier, 2-nic configuration. It deploys 1 server on Premium Storage.
+This is a template for a 2-tier, 1-nic configuration. It deploys 1 server on Premium Storage.
 This template uses Managed Disks.
-
-There is not suitable configuration for X-Large with Standard Storage. If you select this configuration, the template will deploy a Large configuration.
 
 <table>
 	<tr>
@@ -21,19 +19,43 @@ There is not suitable configuration for X-Large with Standard Storage. If you se
 		<th>Premium Storage</th>
 	</tr>
 	<tr>
-		<td>Small Hyperthreaded < 2.000 SAPS</td>
-		<td>1xDS4s_v3 (2xP20 1xP10)</td>
+		<td>ISU</td>
+		<td>1xE4s_v3 (1xP6 1xP30 1xP4 1xP6)</td>
 	</tr>
 	<tr>
-		<td>Medium Hyperthreaded < 9.000 SAPS</td>
-		<td>1xD16s_v3 (3xP20 1xP10)</td>
+		<td>CRM</td>
+		<td>1xE4s_v3 (1xP6 1xP20 1xP4 1xP6)</td>
 	</tr>
 	<tr>
-		<td>Large Hyperthreaded < 18.000 SAPS</td>
-		<td>1xD32s_v3 (3xP30 1xP20)</td>
+		<td>PIC</td>
+		<td>1xD4s_v3 (1xP6 1xP20 1xP4 1xP6)</td>
 	</tr>
 	<tr>
-		<td>X-Large Hyperthreaded < 40.000 SAPS</td>
-		<td>1xE64s_v3 (4xP30 1xP20)</td>
+		<td>BWA</td>
+		<td>1xD4s_v3 (1xP6 1xP20 1xP4 1xP6)</td>
+	</tr>
+	<tr>
+		<td>MOB</td>
+		<td>1xE2s_v3 (1xP6 1xP6 1xP4 1xP6)</td>
+	</tr>
+	<tr>
+		<td>EWM</td>
+		<td>1xE2s_v3 (1xP6 1xP10 1xP4 1xP6)</td>
+	</tr>
+	<tr>
+		<td>JVA</td>
+		<td>1xE2s_v3 (1xP6 1xP6 1xP4 1xP6)</td>
+	</tr>
+	<tr>
+		<td>CEV</td>
+		<td>1xE2s_v3 (1xP6 1xP20 1xP4 1xP6)</td>
+	</tr>
+	<tr>
+		<td>PIN</td>
+		<td>1xE2s_v3 (1xP6 1xP6 1xP4 1xP6)</td>
+	</tr>
+	<tr>
+		<td>NGW</td>
+		<td>1xE2s_v3 (1xP6 1xP10 1xP4 1xP6)</td>
 	</tr>
 </table>				

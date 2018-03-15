@@ -70,12 +70,12 @@
                 "RHEL 7.3",
                 "Oracle Linux 7.2"
             ],
-            "defaultValue": "RHEL 7.2",
+            "defaultValue": "RHEL 7.3",
             "metadata": {
                 "description": "The type of the operating system you want to deploy."
             }
         },
-        "sapSystemSize": {
+        "sapSystemType": {
             "type": "string",
             "allowedValues": [
                 "ISU",
@@ -89,7 +89,7 @@
                 "PIN",
                 "NGW"
             ],
-            "defaultValue": "ISU",
+            "defaultValue": "",
             "metadata": {
                 "description": "The type of the SAP Virtual Machine you want to deploy"
             }
@@ -111,21 +111,21 @@
             "type": "string",
             "maxLength": 36,
             "minLength": 36,
-            "defaultValue": "a8d854f2-407b-4bbe-9575-11cc184a7aa3",
+            "defaultValue": "",
             "metadata": {
                 "description": "The subscription GUID of subnet you want to use, in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
             }
         },
         "subnetResourceGroupName": {
             "type": "string",
-            "defaultValue": "azwu-rg-sap-devtest-defaultnetworking-001",
+            "defaultValue": "",
             "metadata": {
                 "description": "The Resource Group name of the subnet you want to use"
             }
         },
         "subnetVNETName": {
             "type": "string",
-            "defaultValue": "azwu-vnet-devtest-sap-001",
+            "defaultValue": "",
             "metadata": {
                 "description": "The VNET name of the subnet you want to use"
             }
@@ -137,12 +137,33 @@
                 "description": "The name of the subnet you want to use"
             }
         },
+        "ipAddress1": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "The static IP address of NIC1, IPConfig1, e.g. 10.1.1.4"
+            }
+        },
+        "ipAddress2": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "The static IP address of NIC1, IPConfig2, e.g. 10.1.1.5"
+            }
+        },
+        "dnsInternalDomainNameSuffix": {
+            "type": "string",
+            "defaultValue": "sapdevtest.centrica.com",
+            "metadata": {
+                "description": "The DNS FQDN is constructed by concatenating the VM name with the value of dnsInternalDomainNameSuffix"
+            }
+        },
         "_artifactsLocation": {
             "type": "string",
             "metadata": {
                 "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
             },
-            "defaultValue": "https://raw.githubusercontent.com/simonhutson/SAP-Single-VM-Single-NIC-Dual-IP/master/"
+            "defaultValue": "https://raw.githubusercontent.com/simonhutson/SAP-Single-VM-Single-NIC-Dual-IP/sap2/"
         },
         "_artifactsLocationSasToken": {
             "type": "securestring",
@@ -156,15 +177,15 @@
         "subscriptionType": {
             "Dev Test": {
                 "subscriptionTypePrefix": "d",
-                "tagEnvironment" :"SAP Dev Test"
+                "tagEnvironment": "SAP Dev Test"
             },
             "Pre-Production": {
                 "subscriptionTypePrefix": "u",
-                "tagEnvironment" :"SAP Pre-Production"
+                "tagEnvironment": "SAP Pre-Production"
             },
             "Production": {
                 "subscriptionTypePrefix": "p",
-                "tagEnvironment" :"SAP Production"
+                "tagEnvironment": "SAP Production"
             }
         },
         "location": {
@@ -350,7 +371,7 @@
                         "size": 63
                     },
                     {
-                        "size": 255
+                        "size": 511
                     },
                     {
                         "size": 31
@@ -370,7 +391,7 @@
                         "size": 63
                     },
                     {
-                        "size": 255
+                        "size": 511
                     },
                     {
                         "size": 31
@@ -450,7 +471,7 @@
                         "size": 63
                     },
                     {
-                        "size": 255
+                        "size": 511
                     },
                     {
                         "size": 31
@@ -508,18 +529,21 @@
         "environmentPrefix": "[variables('subscriptionType')[parameters('subscriptionType')].subscriptionTypePrefix]",
         "prefix": "[concat('az', if(equals(variables('locationPrefix'), ''), 'xx', variables('locationPrefix')),'-',variables('environmentPrefix'),'vsap')]",
         "subnetId": "[concat('/subscriptions/',parameters('subnetSubscriptionId'), '/resourceGroups/', parameters('subnetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('subnetVNETName'), '/subnets/', parameters('subnetName'))]",
-        "dataDiskSizes": "[variables('vmSizes')[parameters('sapSystemSize')].disks]",
-        "acceleratedNetworking": "[variables('vmSizes')[parameters('sapSystemSize')].acceleratedNetworking]",
+        "dataDiskSizes": "[variables('vmSizes')[parameters('sapSystemType')].disks]",
+        "acceleratedNetworking": "[variables('vmSizes')[parameters('sapSystemType')].acceleratedNetworking]",
+        "dnsInternalDomainNameSuffix": "[toLower(parameters('dnsInternalDomainNameSuffix'))]",
         "vmNumber": "[parameters('vmNumber')]",
         "vmName": "[concat(variables('prefix'),variables('vmNumber'))]",
         "nicName1": "[concat(variables('prefix'),variables('vmNumber'), '-nic1')]",
+        "ipAddress1": "[parameters('ipAddress1')]",
+        "ipAddress2": "[parameters('ipAddress2')]",
         "nestedDeploymentName": "nestedTemplate",
         "nestedDeploymentNameProf": "[concat(variables('nestedDeploymentName'), 'prof')]",
         "nestedDeploymentNameNIC1": "[concat(variables('nestedDeploymentName'), 'nic1')]",
         "osDiskType": "image",
         "tagCostCodeId": "[parameters('tagCostCodeId')]",
         "tagEnvironment": "[variables('subscriptionType')[parameters('subscriptionType')].tagEnvironment]",
-        "tagServiceName": "[variables('vmSizes')[parameters('sapSystemSize')].tagServiceName]",
+        "tagServiceName": "[variables('vmSizes')[parameters('sapSystemType')].tagServiceName]",
         "tagServiceOwner": "[parameters('tagServiceOwner')]",
         "tagServiceTicketRequestId": "[parameters('tagServiceTicketRequestId')]",
         "tagSource": "[parameters('tagSource')]",
@@ -546,6 +570,12 @@
                 "parameters": {
                     "subnetId": {
                         "value": "[variables('subnetId')]"
+                    },
+                    "ipAddress1": {
+                        "value": "[variables('ipAddress1')]"
+                    },
+                    "ipAddress2": {
+                        "value": "[variables('ipAddress2')]"
                     }
                 }
             }
@@ -598,26 +628,12 @@
                 "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNIC1'))]"
             ],
             "properties": {
-                "networkSecurityGroup": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.networkSecurityGroup]",
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig1",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "subnet": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.subnet]",
-                            "primary": true
-                        }
-                    },
-                    {
-                        "name": "ipconfig2",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "subnet": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.subnet]",
-                            "primary": false
-                        }
-                    }
-                ],
-                "enableAcceleratedNetworking": "[variables('acceleratedNetworking')]"
+                "primary": true,
+                "ipConfigurations": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.ipConfigurations]",
+                "enableAcceleratedNetworking": "[variables('acceleratedNetworking')]",
+                "dnsSettings": {
+                    "internalDomainNameSuffix": "[variables('dnsInternalDomainNameSuffix')]"
+                }
             }
         },
         {
@@ -648,7 +664,7 @@
                         "value": "[variables('vmName')]"
                     },
                     "vmSize": {
-                        "value": "[variables('vmSizes')[parameters('sapSystemSize')].size]"
+                        "value": "[variables('vmSizes')[parameters('sapSystemType')].size]"
                     },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
@@ -663,7 +679,7 @@
                         "value": "[variables('csExtension')[variables('internalOSType')].scriptCall]"
                     },
                     "csExtensionscriptArgs": {
-                        "value": "[variables('vmSizes')[parameters('sapSystemSize')].scriptArgs]"
+                        "value": "[variables('vmSizes')[parameters('sapSystemType')].scriptArgs]"
                     },
                     "avSetObj": {
                         "value": {}

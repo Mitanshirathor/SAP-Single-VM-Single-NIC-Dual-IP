@@ -70,7 +70,7 @@
                 "RHEL 7.3",
                 "Oracle Linux 7.2"
             ],
-            "defaultValue": "SLES SAP 12-SP2",
+            "defaultValue": "RHEL 7.2",
             "metadata": {
                 "description": "The type of the operating system you want to deploy."
             }
@@ -111,28 +111,28 @@
             "type": "string",
             "maxLength": 36,
             "minLength": 36,
-            "defaultValue": "25d7b58f-a2ed-4c46-a3f7-1748a5e0934b",
+            "defaultValue": "a8d854f2-407b-4bbe-9575-11cc184a7aa3",
             "metadata": {
                 "description": "The subscription GUID of subnet you want to use, in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
             }
         },
         "subnetResourceGroupName": {
             "type": "string",
-            "defaultValue": "SRH-NETWORKS",
+            "defaultValue": "azwu-rg-sap-devtest-defaultnetworking-001",
             "metadata": {
                 "description": "The Resource Group name of the subnet you want to use"
             }
         },
         "subnetVNETName": {
             "type": "string",
-            "defaultValue": "SRH-VNET-UKSOUTH",
+            "defaultValue": "azwu-vnet-devtest-sap-001",
             "metadata": {
                 "description": "The VNET name of the subnet you want to use"
             }
         },
         "subnetName": {
             "type": "string",
-            "defaultValue": "SAP-1",
+            "defaultValue": "",
             "metadata": {
                 "description": "The name of the subnet you want to use"
             }
@@ -142,7 +142,7 @@
             "metadata": {
                 "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
             },
-            "defaultValue": "https://raw.githubusercontent.com/simonhutson/SAP-Single-VM-Single-NIC-Dual-IP/sap1/"
+            "defaultValue": "https://raw.githubusercontent.com/simonhutson/SAP-Single-VM-Single-NIC-Dual-IP/master/"
         },
         "_artifactsLocationSasToken": {
             "type": "securestring",

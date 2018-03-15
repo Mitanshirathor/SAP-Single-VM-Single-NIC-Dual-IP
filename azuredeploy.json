@@ -75,19 +75,19 @@
                 "description": "The type of the operating system you want to deploy."
             }
         },
-        "sapSystemSize": {
+        "sapSystemType": {
             "type": "string",
             "allowedValues": [
-                "BGR & BGS BILLING (SAP)",
-                "BGR & BGS CRM (SAP)",
-                "SOA PIC",
-                "BGR BILLING BUSINESS WAREHOUSE (SAP)",
-                "SAP BGSM MOBILE",
-                "EWM-CDC",
-                "SAP IPC",
-                "SOA CE",
-                "SOA PIN",
-                "SAP NETWEAVER GATEWAY"
+                "ISU",
+                "CRM",
+                "PIC",
+                "BWA",
+                "MOB",
+                "EWM",
+                "JVA",
+                "CEV",
+                "PIN",
+                "NGW"
             ],
             "defaultValue": "",
             "metadata": {
@@ -324,7 +324,7 @@
             }
         },
         "vmSizes": {
-            "BGR & BGS BILLING (SAP)": {
+            "ISU": {
                 "size": "Standard_E4s_v3",
                 "disks": [
                     {
@@ -341,9 +341,10 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false
+                "acceleratedNetworking": false,
+                "tagServiceName": "BGR & BGS BILLING (SAP)"
             },
-            "BGR & BGS CRM (SAP)": {
+            "CRM": {
                 "size": "Standard_E4s_v3",
                 "disks": [
                     {
@@ -360,9 +361,10 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false
+                "acceleratedNetworking": false,
+                "tagServiceName": "BGR & BGS CRM (SAP)"
             },
-            "SOA PIC": {
+            "PIC": {
                 "size": "Standard_D4s_v3",
                 "disks": [
                     {
@@ -379,9 +381,10 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false
+                "acceleratedNetworking": false,
+                "tagServiceName": "SOA PI"
             },
-            "BGR BILLING BUSINESS WAREHOUSE (SAP)": {
+            "BWA": {
                 "size": "Standard_D4s_v3",
                 "disks": [
                     {
@@ -398,9 +401,10 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false
+                "acceleratedNetworking": false,
+                "tagServiceName": "BGR BILLING BUSINESS WAREHOUSE (SAP)"
             },
-            "SAP BGSM MOBILE": {
+            "MOB": {
                 "size": "Standard_E2s_v3",
                 "disks": [
                     {
@@ -417,9 +421,10 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false
+                "acceleratedNetworking": false,
+                "tagServiceName": "SAP BGSM MOBILE"
             },
-            "EWM-CDC": {
+            "EWM": {
                 "size": "Standard_E2s_v3",
                 "disks": [
                     {
@@ -436,9 +441,10 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false
+                "acceleratedNetworking": false,
+                "tagServiceName": "EWM-CDC"
             },
-            "SAP IPC": {
+            "JVA": {
                 "size": "Standard_E2s_v3",
                 "disks": [
                     {
@@ -455,9 +461,10 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false
+                "acceleratedNetworking": false,
+                "tagServiceName": "SAP IPC"
             },
-            "SOA CE": {
+            "CEV": {
                 "size": "Standard_E2s_v3",
                 "disks": [
                     {
@@ -474,9 +481,10 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false
+                "acceleratedNetworking": false,
+                "tagServiceName": "SOA CE"
             },
-            "SOA PIN": {
+            "PIN": {
                 "size": "Standard_E2s_v3",
                 "disks": [
                     {
@@ -493,9 +501,10 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false
+                "acceleratedNetworking": false,
+                "tagServiceName": "SOA PI"
             },
-            "SAP NETWEAVER GATEWAY": {
+            "NGW": {
                 "size": "Standard_E2s_v3",
                 "disks": [
                     {
@@ -512,15 +521,16 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false
+                "acceleratedNetworking": false,
+                "tagServiceName": "SAP NETWEAVER GATEWAY"
             }
         },
         "locationPrefix": "[variables('location')[resourceGroup().location].locationPrefix]",
         "environmentPrefix": "[variables('subscriptionType')[parameters('subscriptionType')].subscriptionTypePrefix]",
         "prefix": "[concat('az', if(equals(variables('locationPrefix'), ''), 'xx', variables('locationPrefix')),'-',variables('environmentPrefix'),'vsap')]",
         "subnetId": "[concat('/subscriptions/',parameters('subnetSubscriptionId'), '/resourceGroups/', parameters('subnetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('subnetVNETName'), '/subnets/', parameters('subnetName'))]",
-        "dataDiskSizes": "[variables('vmSizes')[parameters('sapSystemSize')].disks]",
-        "acceleratedNetworking": "[variables('vmSizes')[parameters('sapSystemSize')].acceleratedNetworking]",
+        "dataDiskSizes": "[variables('vmSizes')[parameters('sapSystemType')].disks]",
+        "acceleratedNetworking": "[variables('vmSizes')[parameters('sapSystemType')].acceleratedNetworking]",
         "dnsInternalDomainNameSuffix": "[toLower(parameters('dnsInternalDomainNameSuffix'))]",
         "vmNumber": "[parameters('vmNumber')]",
         "vmName": "[concat(variables('prefix'),variables('vmNumber'))]",
@@ -533,7 +543,7 @@
         "osDiskType": "image",
         "tagCostCodeId": "[parameters('tagCostCodeId')]",
         "tagEnvironment": "[variables('subscriptionType')[parameters('subscriptionType')].tagEnvironment]",
-        "tagServiceName": "[parameters('sapSystemSize')]",
+        "tagServiceName": "[variables('vmSizes')[parameters('sapSystemType')].tagServiceName]",
         "tagServiceOwner": "[parameters('tagServiceOwner')]",
         "tagServiceTicketRequestId": "[parameters('tagServiceTicketRequestId')]",
         "tagSource": "[parameters('tagSource')]",
@@ -654,7 +664,7 @@
                         "value": "[variables('vmName')]"
                     },
                     "vmSize": {
-                        "value": "[variables('vmSizes')[parameters('sapSystemSize')].size]"
+                        "value": "[variables('vmSizes')[parameters('sapSystemType')].size]"
                     },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
@@ -669,7 +679,7 @@
                         "value": "[variables('csExtension')[variables('internalOSType')].scriptCall]"
                     },
                     "csExtensionscriptArgs": {
-                        "value": "[variables('vmSizes')[parameters('sapSystemSize')].scriptArgs]"
+                        "value": "[variables('vmSizes')[parameters('sapSystemType')].scriptArgs]"
                     },
                     "avSetObj": {
                         "value": {}

@@ -111,21 +111,21 @@
             "type": "string",
             "maxLength": 36,
             "minLength": 36,
-            "defaultValue": "a8d854f2-407b-4bbe-9575-11cc184a7aa3",
+            "defaultValue": "",
             "metadata": {
                 "description": "The subscription GUID of subnet you want to use, in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
             }
         },
         "subnetResourceGroupName": {
             "type": "string",
-            "defaultValue": "azwu-rg-sap-devtest-defaultnetworking-001",
+            "defaultValue": "",
             "metadata": {
                 "description": "The Resource Group name of the subnet you want to use"
             }
         },
         "subnetVNETName": {
             "type": "string",
-            "defaultValue": "azwu-vnet-devtest-sap-001",
+            "defaultValue": "",
             "metadata": {
                 "description": "The VNET name of the subnet you want to use"
             }
@@ -163,7 +163,7 @@
             "metadata": {
                 "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
             },
-            "defaultValue": "https://raw.githubusercontent.com/simonhutson/SAP-Single-VM-Single-NIC-Dual-IP/master/"
+            "defaultValue": "https://raw.githubusercontent.com/simonhutson/SAP-Single-VM-Single-NIC-Dual-IP/sap2/"
         },
         "_artifactsLocationSasToken": {
             "type": "securestring",

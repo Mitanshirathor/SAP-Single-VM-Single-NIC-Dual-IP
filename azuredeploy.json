@@ -70,7 +70,7 @@
                 "RHEL 7.3",
                 "Oracle Linux 7.2"
             ],
-            "defaultValue": "RHEL 7.2",
+            "defaultValue": "RHEL 7.3",
             "metadata": {
                 "description": "The type of the operating system you want to deploy."
             }
@@ -78,18 +78,18 @@
         "sapSystemSize": {
             "type": "string",
             "allowedValues": [
-                "ISU",
-                "CRM",
-                "PIC",
-                "BWA",
-                "MOB",
-                "EWM",
-                "JVA",
-                "CEV",
-                "PIN",
-                "NGW"
+                "BGR & BGS BILLING (SAP)",
+                "BGR & BGS CRM (SAP)",
+                "SOA PIC",
+                "BGR BILLING BUSINESS WAREHOUSE (SAP)",
+                "SAP BGSM MOBILE",
+                "EWM-CDC",
+                "SAP IPC",
+                "SOA CE",
+                "SOA PIN",
+                "SAP NETWEAVER GATEWAY"
             ],
-            "defaultValue": "ISU",
+            "defaultValue": "",
             "metadata": {
                 "description": "The type of the SAP Virtual Machine you want to deploy"
             }
@@ -137,6 +137,27 @@
                 "description": "The name of the subnet you want to use"
             }
         },
+        "ipAddress1": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "The static IP address of NIC1, IPConfig1, e.g. 10.1.1.4"
+            }
+        },
+        "ipAddress2": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "The static IP address of NIC1, IPConfig2, e.g. 10.1.1.5"
+            }
+        },
+        "dnsInternalDomainNameSuffix": {
+            "type": "string",
+            "defaultValue": "sapdevtest.centrica.com",
+            "metadata": {
+                "description": "The DNS FQDN is constructed by concatenating the VM name with the value of dnsInternalDomainNameSuffix"
+            }
+        },
         "_artifactsLocation": {
             "type": "string",
             "metadata": {
@@ -156,15 +177,15 @@
         "subscriptionType": {
             "Dev Test": {
                 "subscriptionTypePrefix": "d",
-                "tagEnvironment" :"SAP Dev Test"
+                "tagEnvironment": "SAP Dev Test"
             },
             "Pre-Production": {
                 "subscriptionTypePrefix": "u",
-                "tagEnvironment" :"SAP Pre-Production"
+                "tagEnvironment": "SAP Pre-Production"
             },
             "Production": {
                 "subscriptionTypePrefix": "p",
-                "tagEnvironment" :"SAP Production"
+                "tagEnvironment": "SAP Production"
             }
         },
         "location": {
@@ -303,7 +324,7 @@
             }
         },
         "vmSizes": {
-            "ISU": {
+            "BGR & BGS BILLING (SAP)": {
                 "size": "Standard_E4s_v3",
                 "disks": [
                     {
@@ -320,10 +341,9 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false,
-                "tagServiceName": "BGR & BGS BILLING (SAP)"
+                "acceleratedNetworking": false
             },
-            "CRM": {
+            "BGR & BGS CRM (SAP)": {
                 "size": "Standard_E4s_v3",
                 "disks": [
                     {
@@ -340,10 +360,9 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false,
-                "tagServiceName": "BGR & BGS CRM (SAP)"
+                "acceleratedNetworking": false
             },
-            "PIC": {
+            "SOA PIC": {
                 "size": "Standard_D4s_v3",
                 "disks": [
                     {
@@ -360,10 +379,9 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false,
-                "tagServiceName": "SOA PI"
+                "acceleratedNetworking": false
             },
-            "BWA": {
+            "BGR BILLING BUSINESS WAREHOUSE (SAP)": {
                 "size": "Standard_D4s_v3",
                 "disks": [
                     {
@@ -380,10 +398,9 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false,
-                "tagServiceName": "BGR BILLING BUSINESS WAREHOUSE (SAP)"
+                "acceleratedNetworking": false
             },
-            "MOB": {
+            "SAP BGSM MOBILE": {
                 "size": "Standard_E2s_v3",
                 "disks": [
                     {
@@ -400,10 +417,9 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false,
-                "tagServiceName": "SAP BGSM MOBILE"
+                "acceleratedNetworking": false
             },
-            "EWM": {
+            "EWM-CDC": {
                 "size": "Standard_E2s_v3",
                 "disks": [
                     {
@@ -420,10 +436,9 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false,
-                "tagServiceName": "EWM-CDC"
+                "acceleratedNetworking": false
             },
-            "JVA": {
+            "SAP IPC": {
                 "size": "Standard_E2s_v3",
                 "disks": [
                     {
@@ -440,10 +455,9 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false,
-                "tagServiceName": "SAP IPC"
+                "acceleratedNetworking": false
             },
-            "CEV": {
+            "SOA CE": {
                 "size": "Standard_E2s_v3",
                 "disks": [
                     {
@@ -460,10 +474,9 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false,
-                "tagServiceName": "SOA CE"
+                "acceleratedNetworking": false
             },
-            "PIN": {
+            "SOA PIN": {
                 "size": "Standard_E2s_v3",
                 "disks": [
                     {
@@ -480,10 +493,9 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false,
-                "tagServiceName": "SOA PI"
+                "acceleratedNetworking": false
             },
-            "NGW": {
+            "SAP NETWEAVER GATEWAY": {
                 "size": "Standard_E2s_v3",
                 "disks": [
                     {
@@ -500,8 +512,7 @@
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false,
-                "tagServiceName": "SAP NETWEAVER GATEWAY"
+                "acceleratedNetworking": false
             }
         },
         "locationPrefix": "[variables('location')[resourceGroup().location].locationPrefix]",
@@ -510,16 +521,19 @@
         "subnetId": "[concat('/subscriptions/',parameters('subnetSubscriptionId'), '/resourceGroups/', parameters('subnetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('subnetVNETName'), '/subnets/', parameters('subnetName'))]",
         "dataDiskSizes": "[variables('vmSizes')[parameters('sapSystemSize')].disks]",
         "acceleratedNetworking": "[variables('vmSizes')[parameters('sapSystemSize')].acceleratedNetworking]",
+        "dnsInternalDomainNameSuffix": "[toLower(parameters('dnsInternalDomainNameSuffix'))]",
         "vmNumber": "[parameters('vmNumber')]",
         "vmName": "[concat(variables('prefix'),variables('vmNumber'))]",
         "nicName1": "[concat(variables('prefix'),variables('vmNumber'), '-nic1')]",
+        "ipAddress1": "[parameters('ipAddress1')]",
+        "ipAddress2": "[parameters('ipAddress2')]",
         "nestedDeploymentName": "nestedTemplate",
         "nestedDeploymentNameProf": "[concat(variables('nestedDeploymentName'), 'prof')]",
         "nestedDeploymentNameNIC1": "[concat(variables('nestedDeploymentName'), 'nic1')]",
         "osDiskType": "image",
         "tagCostCodeId": "[parameters('tagCostCodeId')]",
         "tagEnvironment": "[variables('subscriptionType')[parameters('subscriptionType')].tagEnvironment]",
-        "tagServiceName": "[variables('vmSizes')[parameters('sapSystemSize')].tagServiceName]",
+        "tagServiceName": "[parameters('sapSystemSize')]",
         "tagServiceOwner": "[parameters('tagServiceOwner')]",
         "tagServiceTicketRequestId": "[parameters('tagServiceTicketRequestId')]",
         "tagSource": "[parameters('tagSource')]",
@@ -546,6 +560,12 @@
                 "parameters": {
                     "subnetId": {
                         "value": "[variables('subnetId')]"
+                    },
+                    "ipAddress1": {
+                        "value": "[variables('ipAddress1')]"
+                    },
+                    "ipAddress2": {
+                        "value": "[variables('ipAddress2')]"
                     }
                 }
             }
@@ -598,26 +618,12 @@
                 "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNIC1'))]"
             ],
             "properties": {
-                "networkSecurityGroup": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.networkSecurityGroup]",
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig1",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "subnet": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.subnet]",
-                            "primary": true
-                        }
-                    },
-                    {
-                        "name": "ipconfig2",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "subnet": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.subnet]",
-                            "primary": false
-                        }
-                    }
-                ],
-                "enableAcceleratedNetworking": "[variables('acceleratedNetworking')]"
+                "primary": true,
+                "ipConfigurations": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration]",
+                "enableAcceleratedNetworking": "[variables('acceleratedNetworking')]",
+                "dnsSettings": {
+                    "internalDomainNameSuffix": "[variables('dnsInternalDomainNameSuffix')]"
+                }
             }
         },
         {

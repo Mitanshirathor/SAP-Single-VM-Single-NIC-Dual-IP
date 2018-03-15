@@ -49,7 +49,7 @@
         "vmNumber": {
             "type": "string",
             "minLength": 3,
-            "maxLength": 3,
+            "maxLength": 4,
             "metadata": {
                 "description": "Unique VM number (must be 3 digits)"
             }
@@ -321,7 +321,7 @@
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
                 "acceleratedNetworking": false,
-                "tagServiceName": "BGR & BGS Billing (SAP)"
+                "tagServiceName": "BGR & BGS BILLING (SAP)"
             },
             "CRM": {
                 "size": "Standard_E4s_v3",
@@ -381,7 +381,7 @@
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
                 "acceleratedNetworking": false,
-                "tagServiceName": "BGR Billing Business Warehouse (SAP)"
+                "tagServiceName": "BGR BILLING BUSINESS WAREHOUSE (SAP)"
             },
             "MOB": {
                 "size": "Standard_E2s_v3",
@@ -401,7 +401,7 @@
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
                 "acceleratedNetworking": false,
-                "tagServiceName": "SAP BGSM Mobile"
+                "tagServiceName": "SAP BGSM MOBILE"
             },
             "EWM": {
                 "size": "Standard_E2s_v3",
@@ -501,7 +501,7 @@
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
                 "acceleratedNetworking": false,
-                "tagServiceName": "SAP NetWeaver Gateway"
+                "tagServiceName": "SAP NETWEAVER GATEWAY"
             }
         },
         "locationPrefix": "[variables('location')[resourceGroup().location].locationPrefix]",
@@ -512,11 +512,7 @@
         "acceleratedNetworking": "[variables('vmSizes')[parameters('sapSystemSize')].acceleratedNetworking]",
         "vmNumber": "[parameters('vmNumber')]",
         "vmName": "[concat(variables('prefix'),variables('vmNumber'))]",
-        "vnetName": "[concat(variables('prefix'),variables('vmNumber'), '-vnet')]",
-        "publicIpName": "[concat(variables('prefix'),variables('vmNumber'), '-pip')]",
         "nicName1": "[concat(variables('prefix'),variables('vmNumber'), '-nic1')]",
-        "nsgName": "[concat(variables('prefix'),variables('vmNumber'), '-nsg')]",
-        "subnetName1": "Subnet1",
         "nestedDeploymentName": "nestedTemplate",
         "nestedDeploymentNameProf": "[concat(variables('nestedDeploymentName'), 'prof')]",
         "nestedDeploymentNameVnet": "[concat(variables('nestedDeploymentName'), 'vnet')]",
@@ -542,39 +538,6 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
-            "name": "[variables('nestedDeploymentNameVnet')]",
-            "condition": "[equals(length(variables('subnetId')), 0)]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/shared/newvnet.json', parameters('_artifactsLocationSasToken'))]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "vnetName": {
-                        "value": "[variables('vnetName')]"
-                    },
-                    "addressPrefix": {
-                        "value": "10.0.0.0/16"
-                    },
-                    "subnetName1": {
-                        "value": "[variables('subnetName1')]"
-                    },
-                    "subnetName2": {
-                        "value": "[variables('subnetName1')]"
-                    },
-                    "subnetPrefix1": {
-                        "value": "10.0.0.0/24"
-                    },
-                    "subnetPrefix2": {
-                        "value": "10.0.1.0/24"
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2017-05-10",
             "name": "[variables('nestedDeploymentNameNIC1')]",
             "properties": {
                 "mode": "Incremental",
@@ -583,18 +546,6 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "vnetName": {
-                        "value": "[variables('vnetName')]"
-                    },
-                    "subnetName": {
-                        "value": "[variables('subnetName1')]"
-                    },
-                    "publicIpName": {
-                        "value": "[variables('publicIpName')]"
-                    },
-                    "nsgName": {
-                        "value": "[variables('nsgName')]"
-                    },
                     "subnetId": {
                         "value": "[variables('subnetId')]"
                     }
@@ -635,27 +586,6 @@
                     },
                     "managedDiskId": {
                         "value": ""
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2017-05-10",
-            "name": "[variables('nestedDeploymentNameNSG')]",
-            "condition": "[equals(length(variables('subnetId')), 0)]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/shared/newnsg.json', parameters('_artifactsLocationSasToken'))]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "nsgName": {
-                        "value": "[variables('nsgName')]"
-                    },
-                    "osType": {
-                        "value": "[variables('internalOSType')]"
                     }
                 }
             }

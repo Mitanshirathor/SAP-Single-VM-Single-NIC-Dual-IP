@@ -14,18 +14,44 @@
                 "description": "Subscription"
             }
         },
-        "tagServiceName": {
+        "tagCostCodeID": {
             "type": "string",
-            "defaultValue": "SAP Dev Test",
+            "maxLength": 256,
+            "defaultValue": "D.4534-02-R01",
             "metadata": {
-                "description": "Service Name tag."
+                "description": "Cost Code ID tag"
             }
         },
-        "sapSystemId": {
+        "tagServiceOwner": {
             "type": "string",
-            "maxLength": 7,
+            "maxLength": 256,
+            "defaultValue": "David Blowers",
             "metadata": {
-                "description": "SAP System ID (maximum length 7 characters)"
+                "description": "Service Owner tag"
+            }
+        },
+        "tagServiceTicketRequestId": {
+            "type": "string",
+            "maxLength": 256,
+            "defaultValue": "CirrusPrj",
+            "metadata": {
+                "description": "Service Ticket Request ID tag"
+            }
+        },
+        "tagSource": {
+            "type": "string",
+            "maxLength": 256,
+            "defaultValue": "servicenow",
+            "metadata": {
+                "description": "Source tag"
+            }
+        },
+        "vmNumber": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 4,
+            "metadata": {
+                "description": "Unique VM number (must be 3 digits)"
             }
         },
         "osType": {
@@ -52,34 +78,63 @@
         "sapSystemSize": {
             "type": "string",
             "allowedValues": [
-                "Small Hyperthreaded < 2.000 SAPS",
-                "Medium Hyperthreaded < 9.000 SAPS",
-                "Large Hyperthreaded < 18.000 SAPS",
-                "X-Large Hyperthreaded < 40.000 SAPS"
+                "ISU",
+                "CRM",
+                "PIC",
+                "BWA",
+                "MOB",
+                "EWM",
+                "JVA",
+                "CEV",
+                "PIN",
+                "NGW"
             ],
-            "defaultValue": "Medium Hyperthreaded < 9.000 SAPS",
+            "defaultValue": "ISU",
             "metadata": {
-                "description": "The size of the SAP System you want to deploy."
+                "description": "The type of the SAP Virtual Machine you want to deploy"
             }
         },
         "adminUsername": {
             "type": "string",
             "metadata": {
-                "description": "Username for the Virtual Machine."
+                "description": "Username for the Virtual Machine"
             }
         },
         "adminPassword": {
             "type": "securestring",
             "minLength": 12,
             "metadata": {
-                "description": "Password for the Virtual Machine."
+                "description": "Password for the Virtual Machine"
             }
         },
-        "subnetId1": {
+        "subnetSubscriptionId": {
             "type": "string",
-            "defaultValue": "",
+            "maxLength": 36,
+            "minLength": 36,
+            "defaultValue": "25d7b58f-a2ed-4c46-a3f7-1748a5e0934b",
             "metadata": {
-                "description": "The id of the 1st subnet you want to use, in the format /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{virtualNetworkName}/subnets/{subnetName}."
+                "description": "The subscription GUID of subnet you want to use, in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+            }
+        },
+        "subnetResourceGroupName": {
+            "type": "string",
+            "defaultValue": "SRH-NETWORKS",
+            "metadata": {
+                "description": "The Resource Group name of the subnet you want to use"
+            }
+        },
+        "subnetVNETName": {
+            "type": "string",
+            "defaultValue": "SRH-VNET-UKSOUTH",
+            "metadata": {
+                "description": "The VNET name of the subnet you want to use"
+            }
+        },
+        "subnetName": {
+            "type": "string",
+            "defaultValue": "SAP-1",
+            "metadata": {
+                "description": "The name of the subnet you want to use"
             }
         },
         "_artifactsLocation": {
@@ -87,7 +142,7 @@
             "metadata": {
                 "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
             },
-            "defaultValue": "https://raw.githubusercontent.com/simonhutson/SAP-Single-VM-Single-NIC-Dual-IP/master/"
+            "defaultValue": "https://raw.githubusercontent.com/simonhutson/SAP-Single-VM-Single-NIC-Dual-IP/sap1/"
         },
         "_artifactsLocationSasToken": {
             "type": "securestring",
@@ -248,147 +303,236 @@
             }
         },
         "vmSizes": {
-            "Small Hyperthreaded < 2.000 SAPS": {
-                "size": "Standard_D4s_v3",
+            "ISU": {
+                "size": "Standard_E4s_v3",
                 "disks": [
                     {
-                        "size": 511
+                        "size": 63
                     },
                     {
-                        "size": 511
+                        "size": 1023
                     },
                     {
-                        "size": 127
+                        "size": 31
+                    },
+                    {
+                        "size": 63
                     }
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
-                "acceleratedNetworking": false
+                "acceleratedNetworking": false,
+                "tagServiceName": "BGR & BGS BILLING (SAP)"
             },
-            "Medium Hyperthreaded < 9.000 SAPS": {
-                "size": "Standard_D16s_v3",
+            "CRM": {
+                "size": "Standard_E4s_v3",
                 "disks": [
                     {
-                        "size": 511
+                        "size": 63
                     },
                     {
                         "size": 511
                     },
                     {
-                        "size": 511
+                        "size": 31
+                    },
+                    {
+                        "size": 63
+                    }
+                ],
+                "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
+                "acceleratedNetworking": false,
+                "tagServiceName": "BGR & BGS CRM (SAP)"
+            },
+            "PIC": {
+                "size": "Standard_D4s_v3",
+                "disks": [
+                    {
+                        "size": 63
+                    },
+                    {
+                        "size": 255
+                    },
+                    {
+                        "size": 31
+                    },
+                    {
+                        "size": 63
+                    }
+                ],
+                "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
+                "acceleratedNetworking": false,
+                "tagServiceName": "SOA PI"
+            },
+            "BWA": {
+                "size": "Standard_D4s_v3",
+                "disks": [
+                    {
+                        "size": 63
+                    },
+                    {
+                        "size": 255
+                    },
+                    {
+                        "size": 31
+                    },
+                    {
+                        "size": 63
+                    }
+                ],
+                "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
+                "acceleratedNetworking": false,
+                "tagServiceName": "BGR BILLING BUSINESS WAREHOUSE (SAP)"
+            },
+            "MOB": {
+                "size": "Standard_E2s_v3",
+                "disks": [
+                    {
+                        "size": 63
+                    },
+                    {
+                        "size": 63
+                    },
+                    {
+                        "size": 31
+                    },
+                    {
+                        "size": 63
+                    }
+                ],
+                "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
+                "acceleratedNetworking": false,
+                "tagServiceName": "SAP BGSM MOBILE"
+            },
+            "EWM": {
+                "size": "Standard_E2s_v3",
+                "disks": [
+                    {
+                        "size": 63
                     },
                     {
                         "size": 127
+                    },
+                    {
+                        "size": 31
+                    },
+                    {
+                        "size": 63
                     }
                 ],
-                "scriptArgs": " -DBDataLUNS '0,1,2' -DBLogLUNS '3'",
-                "acceleratedNetworking": true
+                "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
+                "acceleratedNetworking": false,
+                "tagServiceName": "EWM-CDC"
             },
-            "Large Hyperthreaded < 18.000 SAPS": {
-                "size": "Standard_D32s_v3",
+            "JVA": {
+                "size": "Standard_E2s_v3",
                 "disks": [
                     {
-                        "size": 1023
+                        "size": 63
                     },
                     {
-                        "size": 1023
+                        "size": 63
                     },
                     {
-                        "size": 1023
+                        "size": 31
                     },
                     {
-                        "size": 511
+                        "size": 63
                     }
                 ],
-                "scriptArgs": " -DBDataLUNS '0,1,2' -DBLogLUNS '3'",
-                "acceleratedNetworking": true
+                "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
+                "acceleratedNetworking": false,
+                "tagServiceName": "SAP IPC"
             },
-            "X-Large Hyperthreaded < 40.000 SAPS": {
-                "size": "Standard_E64_v3",
+            "CEV": {
+                "size": "Standard_E2s_v3",
                 "disks": [
                     {
-                        "size": 1023
+                        "size": 63
                     },
                     {
-                        "size": 1023
+                        "size": 255
                     },
                     {
-                        "size": 1023
+                        "size": 31
                     },
                     {
-                        "size": 1023
-                    },
-                    {
-                        "size": 511
+                        "size": 63
                     }
                 ],
-                "scriptArgs": " -DBDataLUNS '0,1,2,3' -DBLogLUNS '4'",
-                "acceleratedNetworking": true
+                "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
+                "acceleratedNetworking": false,
+                "tagServiceName": "SOA CE"
+            },
+            "PIN": {
+                "size": "Standard_E2s_v3",
+                "disks": [
+                    {
+                        "size": 63
+                    },
+                    {
+                        "size": 63
+                    },
+                    {
+                        "size": 31
+                    },
+                    {
+                        "size": 63
+                    }
+                ],
+                "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
+                "acceleratedNetworking": false,
+                "tagServiceName": "SOA PI"
+            },
+            "NGW": {
+                "size": "Standard_E2s_v3",
+                "disks": [
+                    {
+                        "size": 63
+                    },
+                    {
+                        "size": 127
+                    },
+                    {
+                        "size": 31
+                    },
+                    {
+                        "size": 63
+                    }
+                ],
+                "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
+                "acceleratedNetworking": false,
+                "tagServiceName": "SAP NETWEAVER GATEWAY"
             }
         },
         "locationPrefix": "[variables('location')[resourceGroup().location].locationPrefix]",
         "environmentPrefix": "[variables('subscriptionType')[parameters('subscriptionType')].subscriptionTypePrefix]",
-        "prefix": "[concat('az', if(equals(variables('locationPrefix'), ''), 'xx', variables('locationPrefix')),'-',variables('environmentPrefix'),'-')]",
+        "prefix": "[concat('az', if(equals(variables('locationPrefix'), ''), 'xx', variables('locationPrefix')),'-',variables('environmentPrefix'),'vsap')]",
+        "subnetId": "[concat('/subscriptions/',parameters('subnetSubscriptionId'), '/resourceGroups/', parameters('subnetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('subnetVNETName'), '/subnets/', parameters('subnetName'))]",
         "dataDiskSizes": "[variables('vmSizes')[parameters('sapSystemSize')].disks]",
         "acceleratedNetworking": "[variables('vmSizes')[parameters('sapSystemSize')].acceleratedNetworking]",
-        "sapSystemId": "[toLower(parameters('sapSystemId'))]",
-        "vmName": "[concat(variables('prefix'),variables('sapSystemId'))]",
-        "vnetName": "[concat(variables('prefix'),variables('sapSystemId'), '-vnet')]",
-        "publicIpName": "[concat(variables('prefix'),variables('sapSystemId'), '-pip')]",
-        "nicName1": "[concat(variables('prefix'),variables('sapSystemId'), '-nic1')]",
-        "nsgName": "[concat(variables('prefix'),variables('sapSystemId'), '-nsg')]",
-        "subnetName1": "Subnet1",
-        "subnetName2": "Subnet2",
+        "vmNumber": "[parameters('vmNumber')]",
+        "vmName": "[concat(variables('prefix'),variables('vmNumber'))]",
+        "nicName1": "[concat(variables('prefix'),variables('vmNumber'), '-nic1')]",
         "nestedDeploymentName": "nestedTemplate",
         "nestedDeploymentNameProf": "[concat(variables('nestedDeploymentName'), 'prof')]",
-        "nestedDeploymentNameVnet": "[concat(variables('nestedDeploymentName'), 'vnet')]",
-        "nestedDeploymentNameNSG": "[concat(variables('nestedDeploymentName'), 'nsg')]",
         "nestedDeploymentNameNIC1": "[concat(variables('nestedDeploymentName'), 'nic1')]",
-        "nestedDeploymentNamePIP": "[concat(variables('nestedDeploymentName'), 'pip')]",
         "osDiskType": "image",
-        "tagServiceName": "[toUpper(parameters('tagServiceName'))]",
+        "tagCostCodeId": "[parameters('tagCostCodeId')]",
+        "tagEnvironment": "[variables('subscriptionType')[parameters('subscriptionType')].tagEnvironment]",
+        "tagServiceName": "[variables('vmSizes')[parameters('sapSystemSize')].tagServiceName]",
+        "tagServiceOwner": "[parameters('tagServiceOwner')]",
+        "tagServiceTicketRequestId": "[parameters('tagServiceTicketRequestId')]",
+        "tagSource": "[parameters('tagSource')]",
         "tags": {
-            "Cost Code ID": "D.4534-02-R01",
-            "Environment": "[variables('subscriptionType')[parameters('subscriptionType')].tagEnvironment]",
+            "Cost Code ID": "[variables('tagCostCodeId')]",
+            "Environment": "[variables('tagEnvironment')]",
             "Service Name": "[variables('tagServiceName')]",
-            "Service Owner": "David Blowers",
-            "Service Ticket Request ID": "CirrusPrj",
-            "Source": "servicenow"
+            "Service Owner": "[variables('tagServiceOwner')]",
+            "Service Ticket Request ID": "[variables('tagServiceTicketRequestId')]",
+            "Source": "[variables('tagSource')]"
         }
     },
     "resources": [
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2017-05-10",
-            "name": "[variables('nestedDeploymentNameVnet')]",
-            "condition": "[equals(length(parameters('subnetId1')), 0)]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/shared/newvnet.json', parameters('_artifactsLocationSasToken'))]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "vnetName": {
-                        "value": "[variables('vnetName')]"
-                    },
-                    "addressPrefix": {
-                        "value": "10.0.0.0/16"
-                    },
-                    "subnetName1": {
-                        "value": "[variables('subnetName1')]"
-                    },
-                    "subnetName2": {
-                        "value": "[variables('subnetName2')]"
-                    },
-                    "subnetPrefix1": {
-                        "value": "10.0.0.0/24"
-                    },
-                    "subnetPrefix2": {
-                        "value": "10.0.1.0/24"
-                    }
-                }
-            }
-        },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
@@ -400,20 +544,8 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "vnetName": {
-                        "value": "[variables('vnetName')]"
-                    },
-                    "subnetName": {
-                        "value": "[variables('subnetName1')]"
-                    },
-                    "publicIpName": {
-                        "value": "[variables('publicIpName')]"
-                    },
-                    "nsgName": {
-                        "value": "[variables('nsgName')]"
-                    },
                     "subnetId": {
-                        "value": "[parameters('subnetId1')]"
+                        "value": "[variables('subnetId')]"
                     }
                 }
             }
@@ -457,36 +589,13 @@
             }
         },
         {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2017-05-10",
-            "name": "[variables('nestedDeploymentNameNSG')]",
-            "condition": "[equals(length(parameters('subnetId1')), 0)]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(parameters('_artifactsLocation'), '/shared/newnsg.json', parameters('_artifactsLocationSasToken'))]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "nsgName": {
-                        "value": "[variables('nsgName')]"
-                    },
-                    "osType": {
-                        "value": "[variables('internalOSType')]"
-                    }
-                }
-            }
-        },
-        {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2017-10-01",
             "name": "[variables('nicName1')]",
             "location": "[resourceGroup().location]",
             "tags": "[variables('tags')]",
             "dependsOn": [
-                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameVnet'))]",
-                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNIC1'))]",
-                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNSG'))]"
+                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNIC1'))]"
             ],
             "properties": {
                 "networkSecurityGroup": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.networkSecurityGroup]",

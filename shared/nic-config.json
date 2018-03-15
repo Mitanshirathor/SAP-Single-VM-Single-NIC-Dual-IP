@@ -2,29 +2,179 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-      "subnetId": {
-        "type": "string",
-        "defaultValue": "",
-        "metadata": {
-          "description": "The id of the subnet you want to use."
+        "subnetId": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "The id of the subnet you want to use."
+            }
+        },
+        "ipAddress1": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "The static IP address of NIC1, IPConfig1, e.g. 10.1.1.4"
+            }
+        },
+        "ipAddress2": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "TThe static IP address of NIC1, IPConfig2, e.g. 10.1.1.5"
+            }
         }
-      }
     },
     "variables": {
-      "nicConfigurations": {
-          "subnet": {
-            "id": "[parameters('subnetId')]"
-          },
-          "publicIPAddress": null,
-          "networkSecurityGroup": null
-      }
+        "nicConfigurations": {
+            "truetrue": [
+                {
+                    "name": "ipconfig1",
+                    "properties": {
+                        "primary": true,
+                        "privateIPAllocationMethod": "Static",
+                        "privateIPAddressVersion": "IPv4",
+                        "privateIPAddress": "[parameters('ipAddress1')]",
+                        "subnet": {
+                            "id": "[parameters('subnetId')]"
+                        },
+                        "publicIPAddress": null,
+                        "applicationSecurityGroups": null,
+                        "applicationGatewayBackendAddressPools": null,
+                        "loadBalancerBackendAddressPools": null,
+                        "loadBalancerInboundNatRules": null
+                    }
+                },
+                {
+                    "name": "ipconfig2",
+                    "properties": {
+                        "primary": false,
+                        "privateIPAllocationMethod": "Static",
+                        "privateIPAddressVersion": "IPv4",
+                        "privateIPAddress": "[parameters('ipAddress2')]",
+                        "subnet": {
+                            "id": "[parameters('subnetId')]"
+                        },
+                        "publicIPAddress": null,
+                        "applicationSecurityGroups": null,
+                        "applicationGatewayBackendAddressPools": null,
+                        "loadBalancerBackendAddressPools": null,
+                        "loadBalancerInboundNatRules": null
+                    }
+                }
+            ],
+            "truefalse": [
+                {
+                    "name": "ipconfig1",
+                    "properties": {
+                        "primary": true,
+                        "privateIPAllocationMethod": "Static",
+                        "privateIPAddressVersion": "IPv4",
+                        "privateIPAddress": "[parameters('ipAddress1')]",
+                        "subnet": {
+                            "id": "[parameters('subnetId')]"
+                        },
+                        "publicIPAddress": null,
+                        "applicationSecurityGroups": null,
+                        "applicationGatewayBackendAddressPools": null,
+                        "loadBalancerBackendAddressPools": null,
+                        "loadBalancerInboundNatRules": null
+                    }
+                },
+                {
+                    "name": "ipconfig2",
+                    "properties": {
+                        "primary": false,
+                        "privateIPAllocationMethod": "Dynamic",
+                        "privateIPAddressVersion": "IPv4",
+                        "subnet": {
+                            "id": "[parameters('subnetId')]"
+                        },
+                        "publicIPAddress": null,
+                        "applicationSecurityGroups": null,
+                        "applicationGatewayBackendAddressPools": null,
+                        "loadBalancerBackendAddressPools": null,
+                        "loadBalancerInboundNatRules": null
+                    }
+                }
+            ],
+            "falsetrue": [
+                {
+                    "name": "ipconfig1",
+                    "properties": {
+                        "primary": true,
+                        "privateIPAllocationMethod": "Dynamic",
+                        "privateIPAddressVersion": "IPv4",
+                        "subnet": {
+                            "id": "[parameters('subnetId')]"
+                        },
+                        "publicIPAddress": null,
+                        "applicationSecurityGroups": null,
+                        "applicationGatewayBackendAddressPools": null,
+                        "loadBalancerBackendAddressPools": null,
+                        "loadBalancerInboundNatRules": null
+                    }
+                },
+                {
+                    "name": "ipconfig2",
+                    "properties": {
+                        "primary": false,
+                        "privateIPAllocationMethod": "Static",
+                        "privateIPAddressVersion": "IPv4",
+                        "privateIPAddress": "[parameters('ipAddress2')]",
+                        "subnet": {
+                            "id": "[parameters('subnetId')]"
+                        },
+                        "publicIPAddress": null,
+                        "applicationSecurityGroups": null,
+                        "applicationGatewayBackendAddressPools": null,
+                        "loadBalancerBackendAddressPools": null,
+                        "loadBalancerInboundNatRules": null
+                    }
+                }
+            ],
+            "falsefalse": [
+                {
+                    "name": "ipconfig1",
+                    "properties": {
+                        "primary": true,
+                        "privateIPAllocationMethod": "Dynamic",
+                        "privateIPAddressVersion": "IPv4",
+                        "subnet": {
+                            "id": "[parameters('subnetId')]"
+                        },
+                        "publicIPAddress": null,
+                        "applicationSecurityGroups": null,
+                        "applicationGatewayBackendAddressPools": null,
+                        "loadBalancerBackendAddressPools": null,
+                        "loadBalancerInboundNatRules": null
+                    }
+                },
+                {
+                    "name": "ipconfig2",
+                    "properties": {
+                        "primary": false,
+                        "privateIPAllocationMethod": "Dynamic",
+                        "privateIPAddressVersion": "IPv4",
+                        "subnet": {
+                            "id": "[parameters('subnetId')]"
+                        },
+                        "publicIPAddress": null,
+                        "applicationSecurityGroups": null,
+                        "applicationGatewayBackendAddressPools": null,
+                        "loadBalancerBackendAddressPools": null,
+                        "loadBalancerInboundNatRules": null
+                    }
+                }
+            ]
+        },
+        "ipAddressesConfigured": "[concat(string(greater(length(parameters('ipAddress1')), 0)),string(greater(length(parameters('ipAddress2')), 0)))]",
+        "selectedConfiguration": "[variables('nicConfigurations')[variables('ipAddressesConfigured')]]"
     },
-    "resources": [
-    ],
+    "resources": [],
     "outputs": {
-      "selectedConfiguration": {
-        "value": "[variables('nicConfigurations')]",
-        "type": "object"
-      }
+        "selectedConfiguration": {
+            "value": "[variables('selectedConfiguration')]",
+            "type": "object"
+        }
     }
-  }
+}

@@ -22,14 +22,6 @@
                 "description": "Cost Code ID tag"
             }
         },
-        "tagServiceName": {
-            "type": "string",
-            "maxLength": 256,
-            "defaultValue": "SAP Dev Test",
-            "metadata": {
-                "description": "Service Name tag"
-            }
-        },
         "tagServiceOwner": {
             "type": "string",
             "maxLength": 256,
@@ -531,15 +523,16 @@
         "nestedDeploymentNameNSG": "[concat(variables('nestedDeploymentName'), 'nsg')]",
         "nestedDeploymentNameNIC1": "[concat(variables('nestedDeploymentName'), 'nic1')]",
         "osDiskType": "image",
-        "tagCostCodeId": "[toUpper(parameters('tagCostCodeId'))]",
-        "tagServiceName": "[toUpper(parameters('tagServiceName'))]",
-        "tagServiceOwner": "[toUpper(parameters('tagServiceOwner'))]",
-        "tagServiceTicketRequestId": "[toUpper(parameters('tagServiceTicketRequestId'))]",
-        "tagSource": "[toUpper(parameters('tagSource'))]",
+        "tagCostCodeId": "[parameters('tagCostCodeId')]",
+        "tagEnvironment": "[variables('subscriptionType')[parameters('subscriptionType')].tagEnvironment]",
+        "tagServiceName": "[variables('vmSizes')[parameters('sapSystemSize')].tagServiceName]",
+        "tagServiceOwner": "[parameters('tagServiceOwner')]",
+        "tagServiceTicketRequestId": "[parameters('tagServiceTicketRequestId')]",
+        "tagSource": "[parameters('tagSource')]",
         "tags": {
             "Cost Code ID": "[variables('tagCostCodeId')]",
-            "Environment": "[variables('subscriptionType')[parameters('subscriptionType')].tagEnvironment]",
-            "Service Name": "[variables('vmSizes')[parameters('sapSystemSize')].tagServiceName]",
+            "Environment": "[variables('tagEnvironment')]",
+            "Service Name": "[variables('tagServiceName')]",
             "Service Owner": "[variables('tagServiceOwner')]",
             "Service Ticket Request ID": "[variables('tagServiceTicketRequestId')]",
             "Source": "[variables('tagSource')]"

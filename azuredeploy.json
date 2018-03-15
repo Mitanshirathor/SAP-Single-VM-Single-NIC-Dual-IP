@@ -515,8 +515,6 @@
         "nicName1": "[concat(variables('prefix'),variables('vmNumber'), '-nic1')]",
         "nestedDeploymentName": "nestedTemplate",
         "nestedDeploymentNameProf": "[concat(variables('nestedDeploymentName'), 'prof')]",
-        "nestedDeploymentNameVnet": "[concat(variables('nestedDeploymentName'), 'vnet')]",
-        "nestedDeploymentNameNSG": "[concat(variables('nestedDeploymentName'), 'nsg')]",
         "nestedDeploymentNameNIC1": "[concat(variables('nestedDeploymentName'), 'nic1')]",
         "osDiskType": "image",
         "tagCostCodeId": "[parameters('tagCostCodeId')]",
@@ -597,9 +595,7 @@
             "location": "[resourceGroup().location]",
             "tags": "[variables('tags')]",
             "dependsOn": [
-                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameVnet'))]",
                 "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNIC1'))]",
-                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNSG'))]"
             ],
             "properties": {
                 "networkSecurityGroup": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.networkSecurityGroup]",

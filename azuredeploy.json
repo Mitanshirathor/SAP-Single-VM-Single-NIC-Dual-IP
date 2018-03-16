@@ -111,21 +111,21 @@
             "type": "string",
             "maxLength": 36,
             "minLength": 36,
-            "defaultValue": "",
+            "defaultValue": "a8d854f2-407b-4bbe-9575-11cc184a7aa3",
             "metadata": {
                 "description": "The subscription GUID of subnet you want to use, in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
             }
         },
         "subnetResourceGroupName": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "azwu-rg-sap-devtest-defaultnetworking-001",
             "metadata": {
                 "description": "The Resource Group name of the subnet you want to use"
             }
         },
         "subnetVNETName": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "azwu-vnet-devtest-sap-001",
             "metadata": {
                 "description": "The VNET name of the subnet you want to use"
             }

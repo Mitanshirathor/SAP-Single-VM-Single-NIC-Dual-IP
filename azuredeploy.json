@@ -550,7 +550,7 @@
         "vmName": "[concat(variables('prefix'),variables('vmNumber'))]",
         "vmDiagnosticsStorageAccountName": "[variables('location')[resourceGroup().location].vmDiagnosticsStorageAccountName]",
         "vmScriptsStorageAccountName": "[variables('location')[resourceGroup().location].vmScriptsStorageAccountName]",
-        "vmScriptsContainerName": "[variables('location')[resourceGroup().location].vmScriptsContainerName]",
+        "vmScriptsStorageAccountContainerName": "[variables('location')[resourceGroup().location].vmScriptsStorageAccountContainerName]",
         "vmScriptsKeyVaultName": "[variables('location')[resourceGroup().location].vmScriptsKeyVaultName]",
         "vmScriptsKeyVaultResourceGroupName": "[variables('location')[resourceGroup().location].vmScriptsKeyVaultResourceGroupName]",
         "vmScriptsKeyVaultSecretName": "[variables('location')[resourceGroup().location].vmScriptsKeyVaultSecretName]",

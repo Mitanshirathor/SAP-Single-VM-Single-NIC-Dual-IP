@@ -191,19 +191,39 @@
         "location": {
             "uksouth": {
                 "locationPrefix": "su",
-                "vmDiagnosticsStorageAccountName": "azsudsapvmdiags"
+                "vmDiagnosticsStorageAccountName": "azsudsapvmdiags",
+                "vmScriptsStorageAccountName": "azsudsapvmscripts",
+                "vmScriptsStorageAccountContainerName": "scripts",
+                "vmScriptsKeyVaultName": "azsudsapstoragekeys",
+                "vmScriptsKeyVaultResourceGroupName": "azsu-rg-sapdevtest-vmstorageaccounts",
+                "vmScriptsKeyVaultSecretName": "storageaccountkey-vmscripts"
             },
             "ukwest": {
                 "locationPrefix": "wu",
-                "vmDiagnosticsStorageAccountName": "azwudsapvmdiags"
+                "vmDiagnosticsStorageAccountName": "azwudsapvmdiags",
+                "vmScriptsStorageAccountName": "azwudsapvmscripts",
+                "vmScriptsStorageAccountContainerName": "scripts",
+                "vmScriptsKeyVaultName": "azwudsapstoragekeys",
+                "vmScriptsKeyVaultResourceGroupName": "azwu-rg-sapdevtest-vmstorageaccounts",
+                "vmScriptsKeyVaultSecretName": "storageaccountkey-vmscripts"
             },
             "westeurope": {
                 "locationPrefix": "we",
-                "vmDiagnosticsStorageAccountName": "azwedsapvmdiags"
+                "vmDiagnosticsStorageAccountName": "azwedsapvmdiags",
+                "vmScriptsStorageAccountName": "azwedsapvmscripts",
+                "vmScriptsStorageAccountContainerName": "scripts",
+                "vmScriptsKeyVaultName": "azwedsapstoragekeys",
+                "vmScriptsKeyVaultResourceGroupName": "azwe-rg-sapdevtest-vmstorageaccounts",
+                "vmScriptsKeyVaultSecretName": "storageaccountkey-vmscripts"
             },
             "northeurope": {
                 "locationPrefix": "ne",
-                "vmDiagnosticsStorageAccountName": "aznedsapvmdiags"
+                "vmDiagnosticsStorageAccountName": "aznedsapvmdiags",
+                "vmScriptsStorageAccountName": "aznedsapvmscripts",
+                "vmScriptsStorageAccountContainerName": "scripts",
+                "vmScriptsKeyVaultName": "aznedsapstoragekeys",
+                "vmScriptsKeyVaultResourceGroupName": "azne-rg-sapdevtest-vmstorageaccounts",
+                "vmScriptsKeyVaultSecretName": "storageaccountkey-vmscripts"
             }
         },
         "images": {
@@ -317,16 +337,6 @@
             }
         },
         "internalOSType": "[variables('images')[parameters('osType')].OSType]",
-        "csExtension": {
-            "Windows": {
-                "script": "[concat(parameters('_artifactsLocation'), '/shared/configureSAPVM.ps1', parameters('_artifactsLocationSasToken'))]",
-                "scriptCall": "powershell.exe -ExecutionPolicy bypass -File .\\shared\\configureSAPVM.ps1"
-            },
-            "Linux": {
-                "script": "[concat(parameters('_artifactsLocation'), '/shared/configureSAPVM.sh', parameters('_artifactsLocationSasToken'))]",
-                "scriptCall": "sh configureSAPVM.sh"
-            }
-        },
         "vmSizes": {
             "ISU": {
                 "size": "Standard_E4s_v3",
@@ -539,6 +549,19 @@
         "vmNumber": "[parameters('vmNumber')]",
         "vmName": "[concat(variables('prefix'),variables('vmNumber'))]",
         "vmDiagnosticsStorageAccountName": "[variables('location')[resourceGroup().location].vmDiagnosticsStorageAccountName]",
+        "vmScriptsStorageAccountName": "[variables('location')[resourceGroup().location].vmScriptsStorageAccountName]",
+        "vmScriptsContainerName": "[variables('location')[resourceGroup().location].vmScriptsContainerName]",
+        "vmScriptsKeyVaultName": "[variables('location')[resourceGroup().location].vmScriptsKeyVaultName]",
+        "vmScriptsKeyVaultResourceGroupName": "[variables('location')[resourceGroup().location].vmScriptsKeyVaultResourceGroupName]",
+        "vmScriptsKeyVaultSecretName": "[variables('location')[resourceGroup().location].vmScriptsKeyVaultSecretName]",
+        "vmScriptStorageAccountKey": {
+            "reference": {
+                "keyVault": {
+                    "id": "[resourceId(subscription().subscriptionId, variables('vmScriptsKeyVaultResourceGroupName'),'Microsoft.KeyVault/vaults/', variables('vmScriptsKeyVaultName'))]"
+                },
+                "secretName": "[variables('vmScriptsKeyVaultSecretName')]"
+            }
+        },
         "nicName1": "[concat(variables('prefix'),variables('vmNumber'), '-nic1')]",
         "ipAddress1": "[parameters('ipAddress1')]",
         "ipAddress2": "[parameters('ipAddress2')]",
@@ -559,6 +582,16 @@
             "Service Owner": "[variables('tagServiceOwner')]",
             "Service Ticket Request ID": "[variables('tagServiceTicketRequestId')]",
             "Source": "[variables('tagSource')]"
+        },
+        "csExtension": {
+            "Windows": {
+                "script": "[concat(parameters('_artifactsLocation'), '/shared/configureSAPVM.ps1', parameters('_artifactsLocationSasToken'))]",
+                "scriptCall": "powershell.exe -ExecutionPolicy bypass -File .\\shared\\configureSAPVM.ps1"
+            },
+            "Linux": {
+                "script": "[concat(parameters('_artifactsLocation'), '/shared/configureSAPVM.sh', parameters('_artifactsLocationSasToken'))]",
+                "scriptCall": "sh configureSAPVM.sh"
+            }
         }
     },
     "resources": [

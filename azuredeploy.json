@@ -191,19 +191,19 @@
         "location": {
             "uksouth": {
                 "locationPrefix": "su",
-                "vmDiagnosticsStorageAccountName": "uksudsapvmdiags"
+                "vmDiagnosticsStorageAccountName": "azsudsapvmdiags"
             },
             "ukwest": {
                 "locationPrefix": "wu",
-                "vmDiagnosticsStorageAccountName": "ukwudsapvmdiags"
+                "vmDiagnosticsStorageAccountName": "azwudsapvmdiags"
             },
             "westeurope": {
                 "locationPrefix": "we",
-                "vmDiagnosticsStorageAccountName": "ukwedsapvmdiags"
+                "vmDiagnosticsStorageAccountName": "azwedsapvmdiags"
             },
             "northeurope": {
                 "locationPrefix": "ne",
-                "vmDiagnosticsStorageAccountName": "uknedsapvmdiags"
+                "vmDiagnosticsStorageAccountName": "aznedsapvmdiags"
             }
         },
         "images": {

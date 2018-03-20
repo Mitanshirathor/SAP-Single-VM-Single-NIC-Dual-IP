@@ -190,16 +190,20 @@
         },
         "location": {
             "uksouth": {
-                "locationPrefix": "su"
+                "locationPrefix": "su",
+                "vmDiagnosticsStorageAccountName": "uksudsapvmdiags"
             },
             "ukwest": {
-                "locationPrefix": "wu"
+                "locationPrefix": "wu",
+                "vmDiagnosticsStorageAccountName": "ukwudsapvmdiags"
             },
             "westeurope": {
-                "locationPrefix": "we"
+                "locationPrefix": "we",
+                "vmDiagnosticsStorageAccountName": "ukwedsapvmdiags"
             },
             "northeurope": {
-                "locationPrefix": "ne"
+                "locationPrefix": "ne",
+                "vmDiagnosticsStorageAccountName": "uknedsapvmdiags"
             }
         },
         "images": {
@@ -534,6 +538,7 @@
         "dnsInternalDomainNameSuffix": "[toLower(parameters('dnsInternalDomainNameSuffix'))]",
         "vmNumber": "[parameters('vmNumber')]",
         "vmName": "[concat(variables('prefix'),variables('vmNumber'))]",
+        "vmDiagnosticsStorageAccountName": "[variables('location')[resourceGroup().location].vmDiagnosticsStorageAccountName]",
         "nicName1": "[concat(variables('prefix'),variables('vmNumber'), '-nic1')]",
         "ipAddress1": "[parameters('ipAddress1')]",
         "ipAddress2": "[parameters('ipAddress2')]",
@@ -665,6 +670,9 @@
                     },
                     "vmSize": {
                         "value": "[variables('vmSizes')[parameters('sapSystemType')].size]"
+                    },
+                    "vmDiagnosticsStorageAccountName": {
+                        "value": "[variables('vmDiagnosticsStorageAccountName')]"
                     },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"

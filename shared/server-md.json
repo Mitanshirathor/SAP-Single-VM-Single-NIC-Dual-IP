@@ -152,6 +152,7 @@
             }
         },
         "customScriptExtensionName": "[variables('customScriptExtension')[parameters('osType')].Name]",
+        "customScriptExtensionProperties": "[variables('customScriptExtension')[parameters('osType')]]",
         "hardwareProfile": {
             "vmSize": "[parameters('vmSize')]"
         },
@@ -215,9 +216,7 @@
                 "diagnosticsProfile": "[variables('diagnosticsProfile')]"
             }
         },
-        "vmProperties": "[variables('availableProperties')[parameters('osDiskType')]]",
-        "customScriptExtensionProperties": "[variables('customScriptExtension')[parameters('osType')]]"
-
+        "vmProperties": "[variables('availableProperties')[parameters('osDiskType')]]"
     },
     "resources": [
         {

@@ -6,13 +6,11 @@
             "type": "securestring"
         }
     },
-    "variables": {
-        "secret": "[parameters('secret')]"
-    },
+    "variables": {},
     "resources": [],
     "outputs": {
         "secret": {
-            "value": "[variables('secret')]",
+            "value": "[parameters('secret')]",
             "type": "securestring"
         }
     }

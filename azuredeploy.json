@@ -592,9 +592,9 @@
                     "secret": {
                         "reference": {
                             "keyVault": {
-                                "id": "[resourceId(subscription().subscriptionId,  variables('vmScriptsKeyVaultResourceGroupName'), 'Microsoft.KeyVault/vaults', variables('vmScriptsKeyVaultName'))]"
+                                "id": "[resourceId(subscription().subscriptionId,  'azwu-rg-sapdevtest-vmstorageaccounts', 'Microsoft.KeyVault/vaults', 'azwudsapstoragekeys')]"
                             },
-                            "secretName": "[variables('vmScriptsKeyVaultSecretName')]"
+                            "secretName": "storageaccountkey-vmscripts"
                         }
                     }
                 }

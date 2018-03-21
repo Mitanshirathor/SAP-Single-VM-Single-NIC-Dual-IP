@@ -590,7 +590,7 @@
                         "[concat('https://', variables('vmScriptsStorageAccountName'), '.blob.core.windows.net/', variables('vmScriptsStorageAccountContainerName'), '/noop.ps1')]"
                     ]
                 },
-                "protectedSetting": {
+                "protectedSettings": {
                     "commandToExecute": "powershell.exe -ExecutionPolicy bypass -File \".\\noop.ps1\"",
                     "storageAccountName": "[variables('vmScriptsStorageAccountName')]",
                     "storageAccountKey": "[variables('vmScriptStorageAccountKey')]"
@@ -602,7 +602,7 @@
                         "[concat('https://', variables('vmScriptsStorageAccountName'), '.blob.core.windows.net/', variables('vmScriptsStorageAccountContainerName'), '/noop.sh')]"
                     ]
                 },
-                "protectedSetting": {
+                "protectedSettings": {
                     "commandToExecute": "sh noop.sh",
                     "storageAccountName": "[variables('vmScriptsStorageAccountName')]",
                     "storageAccountKey": "[variables('vmScriptStorageAccountKey')]"

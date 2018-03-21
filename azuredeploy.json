@@ -171,6 +171,14 @@
                 "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
             },
             "defaultValue": ""
+        },
+        "vmScriptStorageAccountKey": {
+            "reference": {
+                "keyVault": {
+                    "id": "[resourceId(subscription().subscriptionId, variables('vmScriptsKeyVaultResourceGroupName'),'Microsoft.KeyVault/vaults/', variables('vmScriptsKeyVaultName'))]"
+                },
+                "secretName": "[variables('vmScriptsKeyVaultSecretName')]"
+            }
         }
     },
     "variables": {
@@ -554,14 +562,7 @@
         "vmScriptsKeyVaultName": "[variables('location')[resourceGroup().location].vmScriptsKeyVaultName]",
         "vmScriptsKeyVaultResourceGroupName": "[variables('location')[resourceGroup().location].vmScriptsKeyVaultResourceGroupName]",
         "vmScriptsKeyVaultSecretName": "[variables('location')[resourceGroup().location].vmScriptsKeyVaultSecretName]",
-        "vmScriptStorageAccountKey": {
-            "reference": {
-                "keyVault": {
-                    "id": "[resourceId(subscription().subscriptionId, variables('vmScriptsKeyVaultResourceGroupName'),'Microsoft.KeyVault/vaults/', variables('vmScriptsKeyVaultName'))]"
-                },
-                "secretName": "[variables('vmScriptsKeyVaultSecretName')]"
-            }
-        },
+        "vmScriptStorageAccountKey": "[variables('vmScriptStorageAccountKey')]",
         "nicName1": "[concat(variables('prefix'),variables('vmNumber'), '-nic1')]",
         "ipAddress1": "[parameters('ipAddress1')]",
         "ipAddress2": "[parameters('ipAddress2')]",

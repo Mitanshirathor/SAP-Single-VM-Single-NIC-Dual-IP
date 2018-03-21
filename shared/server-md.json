@@ -126,10 +126,6 @@
         "customScriptExtensionPublisher": "[variables('customScriptExtension')[parameters('osType')].Publisher]",
         "customScriptExtensionName": "[variables('customScriptExtension')[parameters('osType')].Name]",
         "customScriptExtensionVersion": "[variables('customScriptExtension')[parameters('osType')].Version]",
-        "fileUris": "[parameters('customScriptExtensionSettings').fileUris]",
-        "commandToExecute": "[parameters('customScriptExtensionProtectedSettings').commandToExecute]",
-        "storageAccountName": "[parameters('customScriptExtensionProtectedSettings').storageAccountName]",
-        "storageAccountKey": "[parameters('customScriptExtensionProtectedSettings').storageAccountKey]",
         "hardwareProfile": {
             "vmSize": "[parameters('vmSize')]"
         },
@@ -217,14 +213,8 @@
                 "type": "[variables('customScriptExtensionName')]",
                 "typeHandlerVersion": "[variables('customScriptExtensionVersion')]",
                 "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "fileUris": "[variables('fileUris')]"
-                },
-                "protectedSettings": {
-                    "commandToExecute": "[variables('commandToExecute')]",
-                    "storageAccountName": "[variables('storageAccountName')]",
-                    "storageAccountKey": "[variables('storageAccountKey')]"
-                }
+                "settings": "[parameters('customScriptExtensionSettings')]",
+                "protectedSettings": "[parameters('customScriptExtensionProtectedSettings')]"
             }
         }
     ]

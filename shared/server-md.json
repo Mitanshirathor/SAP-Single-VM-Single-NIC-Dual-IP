@@ -68,7 +68,7 @@
             }
         },
         "customScriptStorageAccountKey": {
-            "type": "securestring",
+            "type": "string",
             "metadata": {
                 "description": "Storage Account Key containing the CustomScript."
             }

@@ -55,16 +55,22 @@
                 "description": "Password for the Virtual Machine."
             }
         },
-        "customScriptExtensionSettings": {
-            "type": "object",
+        "customScriptStorageAccountName": {
+            "type": "string",
             "metadata": {
-                "description": "Settings for the CustomScriptExtension."
+                "description": "Storage Account containing the CustomScript."
             }
         },
-        "customScriptExtensionProtectedSettings": {
-            "type": "object",
+        "customScriptStorageAccountContainerName": {
+            "type": "string",
             "metadata": {
-                "description": "Protected Settings for the CustomScriptExtension."
+                "description": "Storage Account Container containing the CustomScript."
+            }
+        },
+        "customScriptStorageAccountKey": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Storage Account Key containing the CustomScript."
             }
         },
         "avSetObj": {
@@ -115,17 +121,37 @@
             "Windows": {
                 "Publisher": "Microsoft.Compute",
                 "Name": "CustomScriptExtension",
-                "Version": "1.7"
+                "Version": "1.7",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "fileUris": [
+                        "[concat('https://', parameters('customScriptStorageAccountName'), '.blob.core.windows.net/', parameters('customScriptStorageAccountContainerName'), '/noop.ps1')]"
+                    ]
+                },
+                "protectedSettings": {
+                    "commandToExecute": "powershell.exe -ExecutionPolicy bypass -File \".\\noop.ps1\"",
+                    "storageAccountName": "[parameters('customScriptStorageAccountName')]",
+                    "storageAccountKey": "[parameters('customScriptStorageAccountKey')]"
+                }
             },
             "Linux": {
                 "Publisher": "Microsoft.Azure.Extensions",
                 "Name": "CustomScript",
-                "Version": "2.0"
+                "Version": "2.0",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "fileUris": [
+                        "[concat('https://', parameters('customScriptStorageAccountName'), '.blob.core.windows.net/', parameters('customScriptStorageAccountContainerName'), '/noop.sh')]"
+                    ]
+                },
+                "protectedSettings": {
+                    "commandToExecute": "sh noop.sh",
+                    "storageAccountName": "[parameters('customScriptStorageAccountName')]",
+                    "storageAccountKey": "[parameters('customScriptStorageAccountKey')]"
+                }
             }
         },
-        "customScriptExtensionPublisher": "[variables('customScriptExtension')[parameters('osType')].Publisher]",
         "customScriptExtensionName": "[variables('customScriptExtension')[parameters('osType')].Name]",
-        "customScriptExtensionVersion": "[variables('customScriptExtension')[parameters('osType')].Version]",
         "hardwareProfile": {
             "vmSize": "[parameters('vmSize')]"
         },
@@ -189,7 +215,9 @@
                 "diagnosticsProfile": "[variables('diagnosticsProfile')]"
             }
         },
-        "internalProperties": "[variables('availableProperties')[parameters('osDiskType')]]"
+        "vmProperties": "[variables('availableProperties')[parameters('osDiskType')]]",
+        "customScriptExtensionProperties": "[variables('customScriptExtension')[parameters('osType')]]"
+
     },
     "resources": [
         {
@@ -198,7 +226,7 @@
             "name": "[parameters('vmName')]",
             "location": "[resourceGroup().location]",
             "tags": "[parameters('tags')]",
-            "properties": "[variables('internalProperties')]"
+            "properties": "[variables('vmProperties')]"
         },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
@@ -208,14 +236,7 @@
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
             ],
-            "properties": {
-                "publisher": "[variables('customScriptExtensionPublisher')]",
-                "type": "[variables('customScriptExtensionName')]",
-                "typeHandlerVersion": "[variables('customScriptExtensionVersion')]",
-                "autoUpgradeMinorVersion": true,
-                "settings": "[parameters('customScriptExtensionSettings')]",
-                "protectedSettings": "[parameters('customScriptExtensionProtectedSettings')]"
-            }
+            "properties": "[variables('customScriptExtensionProperties')]"
         }
     ]
 }

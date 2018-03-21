@@ -132,7 +132,7 @@
         },
         "subnetName": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "azwu-subn-devtest-sap-ukh-isu-001",
             "metadata": {
                 "description": "The name of the subnet you want to use"
             }
@@ -730,7 +730,7 @@
                         "value": "[parameters('adminPassword')]"
                     },
                     "customScriptExtensionSettings": {
-                        "value": "[variables('customScriptExtension')[variables('internalOSType')].settings]"
+                        "value": "[variables('customScriptExtension')[variables('internalOSType')].protectedSettings]"
                     },
                     "customScriptExtensionProtectedSettings": {
                         "value": "[variables('customScriptExtension')[variables('internalOSType')].protectedSettings]"

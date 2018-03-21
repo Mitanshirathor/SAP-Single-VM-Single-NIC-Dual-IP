@@ -562,13 +562,13 @@
         "vmScriptsKeyVaultName": "[variables('location')[resourceGroup().location].vmScriptsKeyVaultName]",
         "vmScriptsKeyVaultResourceGroupName": "[variables('location')[resourceGroup().location].vmScriptsKeyVaultResourceGroupName]",
         "vmScriptsKeyVaultSecretName": "[variables('location')[resourceGroup().location].vmScriptsKeyVaultSecretName]",
-        "vmScriptStorageAccountKey": "[variables('vmScriptStorageAccountKey')]",
         "nicName1": "[concat(variables('prefix'),variables('vmNumber'), '-nic1')]",
         "ipAddress1": "[parameters('ipAddress1')]",
         "ipAddress2": "[parameters('ipAddress2')]",
         "nestedDeploymentName": "nestedTemplate",
         "nestedDeploymentNameProf": "[concat(variables('nestedDeploymentName'), 'prof')]",
         "nestedDeploymentNameNIC1": "[concat(variables('nestedDeploymentName'), 'nic1')]",
+        "nestedDeploymentNameVMScriptsKeyVault": "[concat(variables('nestedDeploymentName'), 'vmscriptsecret')]",
         "osDiskType": "image",
         "tagCostCodeId": "[parameters('tagCostCodeId')]",
         "tagEnvironment": "[variables('subscriptionType')[parameters('subscriptionType')].tagEnvironment]",
@@ -583,35 +583,31 @@
             "Service Owner": "[variables('tagServiceOwner')]",
             "Service Ticket Request ID": "[variables('tagServiceTicketRequestId')]",
             "Source": "[variables('tagSource')]"
-        },
-        "customScriptExtension": {
-            "Windows": {
-                "settings": {
-                    "fileUris": [
-                        "[concat('https://', variables('vmScriptsStorageAccountName'), '.blob.core.windows.net/', variables('vmScriptsStorageAccountContainerName'), '/noop.ps1')]"
-                    ]
-                },
-                "protectedSettings": {
-                    "commandToExecute": "powershell.exe -ExecutionPolicy bypass -File \".\\noop.ps1\"",
-                    "storageAccountName": "[variables('vmScriptsStorageAccountName')]",
-                    "storageAccountKey": "[variables('vmScriptStorageAccountKey')]"
-                }
-            },
-            "Linux": {
-                "settings": {
-                    "fileUris": [
-                        "[concat('https://', variables('vmScriptsStorageAccountName'), '.blob.core.windows.net/', variables('vmScriptsStorageAccountContainerName'), '/noop.sh')]"
-                    ]
-                },
-                "protectedSettings": {
-                    "commandToExecute": "sh noop.sh",
-                    "storageAccountName": "[variables('vmScriptsStorageAccountName')]",
-                    "storageAccountKey": "[variables('vmScriptStorageAccountKey')]"
-                }
-            }
         }
     },
     "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "name": "[variables('nestedDeploymentNameVMScriptsKeyVault')]",
+            "properties": {
+                "mode": "incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('_artifactsLocation'), '/shared/keyvault-config.json', parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "secret": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(subscription().subscriptionId,  variables('vmScriptsKeyVaultResourceGroupName'), 'Microsoft.KeyVault/vaults', variables('vmScriptsKeyVaultName'))]"
+                            },
+                            "secretName": "[variables('vmScriptsKeyVaultSecretName')]"
+                        }
+                    }
+                }
+            }
+        },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
@@ -696,6 +692,7 @@
             "apiVersion": "2017-05-10",
             "name": "[variables('nestedDeploymentName')]",
             "dependsOn": [
+                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameVMScriptsKeyVault'))]",
                 "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameProf'))]",
                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName1'))]"
             ],
@@ -730,11 +727,14 @@
                     "adminPassword": {
                         "value": "[parameters('adminPassword')]"
                     },
-                    "customScriptExtensionSettings": {
-                        "value": "[variables('customScriptExtension')[variables('internalOSType')].settings]"
+                    "customScriptStorageAccountName": {
+                        "value": "[variables('vmScriptsStorageAccountName')]"
                     },
-                    "customScriptExtensionProtectedSettings": {
-                        "value": "[variables('customScriptExtension')[variables('internalOSType')].protectedSettings]"
+                    "customScriptStorageAccountContainerName": {
+                        "value": "[variables('vmScriptsStorageAccountContainerName')]"
+                    },
+                    "customScriptStorageAccountKey": {
+                        "value": "[reference(variables('nestedDeploymentNameVMScriptsKeyVault')).outputs.secret.value]"
                     },
                     "avSetObj": {
                         "value": {}

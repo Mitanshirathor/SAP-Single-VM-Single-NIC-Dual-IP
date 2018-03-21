@@ -119,9 +119,9 @@
         "internalAVSetObj": "[variables('availableAVSetObj')[toLower(string(parameters('useAVSet')))]]",
         "customScriptExtension": {
             "Windows": {
-                "Publisher": "Microsoft.Compute",
-                "Name": "CustomScriptExtension",
-                "Version": "1.7",
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.7",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
@@ -135,9 +135,9 @@
                 }
             },
             "Linux": {
-                "Publisher": "Microsoft.Azure.Extensions",
-                "Name": "CustomScript",
-                "Version": "2.0",
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.0",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
@@ -151,7 +151,7 @@
                 }
             }
         },
-        "customScriptExtensionName": "[variables('customScriptExtension')[parameters('osType')].Name]",
+        "customScriptExtensionName": "[variables('customScriptExtension')[parameters('osType')].type]",
         "customScriptExtensionProperties": "[variables('customScriptExtension')[parameters('osType')]]",
         "hardwareProfile": {
             "vmSize": "[parameters('vmSize')]"

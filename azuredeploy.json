@@ -730,7 +730,7 @@
                         "value": "[parameters('adminPassword')]"
                     },
                     "customScriptExtensionSettings": {
-                        "value": "[variables('customScriptExtension')[variables('internalOSType')].protectedSettings]"
+                        "value": "[variables('customScriptExtension')[variables('internalOSType')].settings]"
                     },
                     "customScriptExtensionProtectedSettings": {
                         "value": "[variables('customScriptExtension')[variables('internalOSType')].protectedSettings]"

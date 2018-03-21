@@ -171,9 +171,6 @@
                 "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
             },
             "defaultValue": ""
-        },
-        "kvsecret": {
-            "type": "securestring"
         }
     },
     "variables": {
@@ -595,9 +592,9 @@
                     "secret": {
                         "reference": {
                             "keyVault": {
-                                "id": "[resourceId(subscription().subscriptionId,  'azwu-rg-sapdevtest-vmstorageaccounts', 'Microsoft.KeyVault/vaults', 'azwudsapstoragekeys')]"
+                                "id": "[resourceId(subscription().subscriptionId,  variables('vmScriptsKeyVaultResourceGroupName'), 'Microsoft.KeyVault/vaults', variables('vmScriptsKeyVaultName'))]"
                             },
-                            "secretName": "storageaccountkey-vmscripts"
+                            "secretName": "[variables('vmScriptsKeyVaultSecretName')]"
                         }
                     }
                 }
@@ -729,7 +726,7 @@
                         "value": "[variables('vmScriptsStorageAccountContainerName')]"
                     },
                     "customScriptStorageAccountKey": {
-                        "value": "[parameters('kvsecret')]"
+                        "value": "[variables('vmScriptsKeyVaultSecretName')]"
                     },
                     "avSetObj": {
                         "value": {}

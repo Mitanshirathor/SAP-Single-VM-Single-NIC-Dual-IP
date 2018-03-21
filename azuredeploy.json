@@ -583,14 +583,30 @@
             "Service Ticket Request ID": "[variables('tagServiceTicketRequestId')]",
             "Source": "[variables('tagSource')]"
         },
-        "csExtension": {
+        "customScriptExtension": {
             "Windows": {
-                "script": "[concat(parameters('_artifactsLocation'), '/shared/configureSAPVM.ps1', parameters('_artifactsLocationSasToken'))]",
-                "scriptCall": "powershell.exe -ExecutionPolicy bypass -File .\\shared\\configureSAPVM.ps1"
+                "settings": {
+                    "fileUris": [
+                        "[concat('https://', variables('vmScriptsStorageAccountName'), '.blob.core.windows.net/', variables('vmScriptsStorageAccountContainerName'), '/noop.ps1')]"
+                    ]
+                },
+                "protectedSetting": {
+                    "commandToExecute": "powershell.exe -ExecutionPolicy bypass -File \".\\noop.ps1\"",
+                    "storageAccountName": "[variables('vmScriptsStorageAccountName')]",
+                    "storageAccountKey": "[variables('vmScriptStorageAccountKey')]"
+                }
             },
             "Linux": {
-                "script": "[concat(parameters('_artifactsLocation'), '/shared/configureSAPVM.sh', parameters('_artifactsLocationSasToken'))]",
-                "scriptCall": "sh configureSAPVM.sh"
+                "settings": {
+                    "fileUris": [
+                        "[concat('https://', variables('vmScriptsStorageAccountName'), '.blob.core.windows.net/', variables('vmScriptsStorageAccountContainerName'), '/noop.sh')]"
+                    ]
+                },
+                "protectedSetting": {
+                    "commandToExecute": "sh noop.sh",
+                    "storageAccountName": "[variables('vmScriptsStorageAccountName')]",
+                    "storageAccountKey": "[variables('vmScriptStorageAccountKey')]"
+                }
             }
         }
     },
@@ -713,14 +729,11 @@
                     "adminPassword": {
                         "value": "[parameters('adminPassword')]"
                     },
-                    "csExtensionScript": {
-                        "value": "[variables('csExtension')[variables('internalOSType')].script]"
+                    "customScriptExtensionSettings": {
+                        "value": "[variables('customScriptExtension')[variables('internalOSType')].settings]"
                     },
-                    "csExtensionscriptCall": {
-                        "value": "[variables('csExtension')[variables('internalOSType')].scriptCall]"
-                    },
-                    "csExtensionscriptArgs": {
-                        "value": "[variables('vmSizes')[parameters('sapSystemType')].scriptArgs]"
+                    "customScriptExtensionProtectedSettings": {
+                        "value": "[variables('customScriptExtension')[variables('internalOSType')].protectedSettings]"
                     },
                     "avSetObj": {
                         "value": {}

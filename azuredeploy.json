@@ -172,13 +172,8 @@
             },
             "defaultValue": ""
         },
-        "secretabc": {
-            "reference": {
-                "keyVault": {
-                    "id": "[resourceId(subscription().subscriptionId,  'azwu-rg-sapdevtest-vmstorageaccounts', 'Microsoft.KeyVault/vaults', 'azwudsapstoragekeys')]"
-                },
-                "secretName": "storageaccountkey-vmscripts"
-            }
+        "kvsecret": {
+            "type": "securestring"
         }
     },
     "variables": {
@@ -734,7 +729,7 @@
                         "value": "[variables('vmScriptsStorageAccountContainerName')]"
                     },
                     "customScriptStorageAccountKey": {
-                        "value": "[reference(variables('nestedDeploymentNameVMScriptsKeyVault')).outputs.secret.value]"
+                        "value": "[parameters('kvsecret')]"
                     },
                     "avSetObj": {
                         "value": {}

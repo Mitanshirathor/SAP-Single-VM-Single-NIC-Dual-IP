@@ -592,7 +592,7 @@
                     "secret": {
                         "reference": {
                             "keyVault": {
-                                "id": "[resourceId(subscription().subscriptionId,  variables('vmScriptsKeyVaultResourceGroupName'), 'Microsoft.KeyVault/vaults', variables('vmScriptsKeyVaultName')]"
+                                "id": "[resourceId(subscription().subscriptionId,  variables('vmScriptsKeyVaultResourceGroupName'), 'Microsoft.KeyVault/vaults', variables('vmScriptsKeyVaultName'))]"
                             },
                             "secretName": "[variables('vmScriptsKeyVaultSecretName')]"
                         }

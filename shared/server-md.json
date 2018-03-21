@@ -55,22 +55,16 @@
                 "description": "Password for the Virtual Machine."
             }
         },
-        "csExtensionScript": {
+        "customScriptExtensionSettings": {
             "type": "string",
             "metadata": {
-                "description": "Script that should be passed to the CustomScriptExtension."
+                "description": "Settings for the CustomScriptExtension."
             }
         },
-        "csExtensionscriptCall": {
+        "customScriptExtensionProtectedSettings": {
             "type": "string",
             "metadata": {
-                "description": "Script call that should be passed to the CustomScriptExtension."
-            }
-        },
-        "csExtensionscriptArgs": {
-            "type": "string",
-            "metadata": {
-                "description": "Script call that should be passed to the CustomScriptExtension."
+                "description": "Protected Settings for the CustomScriptExtension."
             }
         },
         "avSetObj": {
@@ -117,7 +111,7 @@
             "false": null
         },
         "internalAVSetObj": "[variables('availableAVSetObj')[toLower(string(parameters('useAVSet')))]]",
-        "csExtension": {
+        "customScriptExtension": {
             "Windows": {
                 "Publisher": "Microsoft.Compute",
                 "Name": "CustomScriptExtension",
@@ -129,9 +123,9 @@
                 "Version": "2.0"
             }
         },
-        "cseExtPublisher": "[variables('csExtension')[parameters('osType')].Publisher]",
-        "cseExtName": "[variables('csExtension')[parameters('osType')].Name]",
-        "cseExtVersion": "[variables('csExtension')[parameters('osType')].Version]",
+        "customScriptExtensionPublisher": "[variables('customScriptExtension')[parameters('osType')].Publisher]",
+        "customScriptExtensionName": "[variables('customScriptExtension')[parameters('osType')].Name]",
+        "customScriptExtensionVersion": "[variables('customScriptExtension')[parameters('osType')].Version]",
         "hardwareProfile": {
             "vmSize": "[parameters('vmSize')]"
         },
@@ -205,6 +199,23 @@
             "location": "[resourceGroup().location]",
             "tags": "[parameters('tags')]",
             "properties": "[variables('internalProperties')]"
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('vmName'), '/', variables('customScriptExtensionName'))]",
+            "apiVersion": "2015-06-15",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+            ],
+            "properties": {
+                "publisher": "[variables('customScriptExtensionPublisher')]",
+                "type": "[variables('customScriptExtensionName')]",
+                "typeHandlerVersion": "[variables('customScriptExtensionVersion')]",
+                "autoUpgradeMinorVersion": true,
+                "settings": "[parameters('customScriptExtensionSettings')]",
+                "protectedSettings": "[parameters('customScriptExtensionProtectedSettings')]"
+            }
         }
     ]
 }

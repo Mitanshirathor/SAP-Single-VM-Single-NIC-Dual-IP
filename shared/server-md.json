@@ -56,13 +56,13 @@
             }
         },
         "customScriptExtensionSettings": {
-            "type": "string",
+            "type": "object",
             "metadata": {
                 "description": "Settings for the CustomScriptExtension."
             }
         },
         "customScriptExtensionProtectedSettings": {
-            "type": "string",
+            "type": "object",
             "metadata": {
                 "description": "Protected Settings for the CustomScriptExtension."
             }

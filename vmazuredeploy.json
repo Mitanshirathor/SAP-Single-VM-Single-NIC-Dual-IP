@@ -8,7 +8,7 @@
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2017-03-30",
             "name": "azwu-dvsap804",
-            "location": "uksouth",
+            "location": "ukwest",
             "tags": {},
             "properties": {
                 "hardwareProfile": {

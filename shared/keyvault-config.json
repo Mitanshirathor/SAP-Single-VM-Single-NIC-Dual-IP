@@ -10,7 +10,7 @@
     "resources": [],
     "outputs": {
         "secret": {
-            "value": "[parameters('secret')]",
+            "value": "[base64ToString(parameters('secret'))]",
             "type": "string"
         }
     }

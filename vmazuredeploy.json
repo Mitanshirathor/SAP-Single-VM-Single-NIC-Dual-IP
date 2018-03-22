@@ -7,7 +7,7 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2017-03-30",
-            "name": "azsu-dvsap804",
+            "name": "azwu-dvsap804",
             "location": "uksouth",
             "tags": {},
             "properties": {
@@ -19,7 +19,7 @@
                         "id": "/subscriptions/a8d854f2-407b-4bbe-9575-11cc184a7aa3/resourceGroups/azwu-rg-sapdevtest-vmcustomimages/providers/Microsoft.Compute/images/RHEL7.3-BYOS-2018-03-21"
                       },
                       "osDisk": {
-                        "name": "azsu-dvsap804-osdisk",
+                        "name": "azwu-dvsap804-osdisk",
                         "caching": "ReadWrite",
                         "createOption": "FromImage",
                         "managedDisk": {
@@ -41,13 +41,13 @@
                 },
                 "osProfile": {
                     "adminUsername": "srh",
-                    "computerName": "myVM",
+                    "computerName": "azwu-dvsap804",
                     "adminPassword": "R0seGr1een1912"
                 },
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "/subscriptions/a8d854f2-407b-4bbe-9575-11cc184a7aa3/resourceGroups/azwu-rg-sapdevtest-srh803/providers/Microsoft.Network/networkInterfaces/azsu-dvsap804-nic1",
+                            "id": "/subscriptions/a8d854f2-407b-4bbe-9575-11cc184a7aa3/resourceGroups/azwu-rg-sapdevtest-srh803/providers/Microsoft.Network/networkInterfaces/azwu-dvsap804-nic1",
                             "properties": {
                                 "primary": true
                             }

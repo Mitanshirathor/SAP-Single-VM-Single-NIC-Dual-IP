@@ -726,7 +726,7 @@
                         "value": "[variables('vmScriptsStorageAccountContainerName')]"
                     },
                     "customScriptStorageAccountKey": {
-                        "value": "[variables('vmScriptsKeyVaultSecretName')]"
+                        "value": "[reference(variables('nestedDeploymentNameVMScriptsKeyVault')).outputs.secret.value]"
                     },
                     "avSetObj": {
                         "value": {}

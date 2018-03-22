@@ -7,8 +7,8 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2017-03-30",
-            "name": "azwu-dvsap803",
-            "location": "ukwest",
+            "name": "azsu-dvsap804",
+            "location": "uksouth",
             "tags": {},
             "properties": {
                 "hardwareProfile": {
@@ -19,7 +19,7 @@
                         "id": "/subscriptions/a8d854f2-407b-4bbe-9575-11cc184a7aa3/resourceGroups/azwu-rg-sapdevtest-vmcustomimages/providers/Microsoft.Compute/images/RHEL7.3-BYOS-2018-03-21"
                       },
                       "osDisk": {
-                        "name": "azwu-dvsap803-osdisk",
+                        "name": "azsu-dvsap804-osdisk",
                         "caching": "ReadWrite",
                         "createOption": "FromImage",
                         "managedDisk": {
@@ -33,7 +33,7 @@
                             "input": {
                                 "lun": "[copyIndex('dataDisks')]",
                                 "createOption": "Empty",
-                                "name": "[concat('azwu-dvsap803-datadisk-',padLeft(copyIndex('dataDisks'),2,'0'))]",
+                                "name": "[concat('azsu-dvsap804-datadisk-',padLeft(copyIndex('dataDisks'),2,'0'))]",
                                 "diskSizeGB": 1023
                             }
                         }
@@ -47,7 +47,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "/subscriptions/a8d854f2-407b-4bbe-9575-11cc184a7aa3/resourceGroups/azwu-rg-sapdevtest-srh803/providers/Microsoft.Network/networkInterfaces/azwu-dvsap803-nic1",
+                            "id": "/subscriptions/a8d854f2-407b-4bbe-9575-11cc184a7aa3/resourceGroups/azwu-rg-sapdevtest-srh803/providers/Microsoft.Network/networkInterfaces/azsu-dvsap804-nic1",
                             "properties": {
                                 "primary": true
                             }

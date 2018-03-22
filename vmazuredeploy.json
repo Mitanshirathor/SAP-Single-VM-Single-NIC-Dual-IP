@@ -18,7 +18,7 @@
                     "osDisk": {
                         "name": "azwu-dvsap803-osdisk",
                         "image": {
-                            "uri": "http://{existing-storage-account-name}.blob.core.windows.net/{existing-container-name}/{existing-generalized-os-image-blob-name}.vhd"
+                            "uri": "https://azwudsapvmimages.blob.core.windows.net/vmimages/RHEL-7.3-BYOS-2018-03-22.vhd"
                         },
                         "caching": "ReadWrite",
                         "createOption": "FromImage",

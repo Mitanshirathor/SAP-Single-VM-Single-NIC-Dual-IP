@@ -15,11 +15,11 @@
                     "vmSize": "Standard_D4s_v3"
                 },
                 "storageProfile": {
-                    "osDisk": {
+                    "imageReference": {
+                        "id": "/subscriptions/a8d854f2-407b-4bbe-9575-11cc184a7aa3/resourceGroups/azwu-rg-sapdevtest-vmcustomimages/providers/Microsoft.Compute/images/RHEL7.3-BYOS-2018-03-21"
+                      },
+                      "osDisk": {
                         "name": "azwu-dvsap803-osdisk",
-                        "image": {
-                            "uri": "https://azwudsapvmimages.blob.core.windows.net/vmimages/RHEL-7.3-BYOS-2018-03-22.vhd"
-                        },
                         "caching": "ReadWrite",
                         "createOption": "FromImage",
                         "managedDisk": {

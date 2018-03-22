@@ -58,4 +58,4 @@ This template uses Managed Disks.
 		<td>NGW</td>
 		<td>1xE2s_v3 (1xP6 1xP10 1xP4 1xP6)</td>
 	</tr>
-</table>				
+</table>

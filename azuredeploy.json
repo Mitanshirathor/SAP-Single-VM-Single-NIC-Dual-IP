@@ -196,7 +196,7 @@
                 "vmScriptsStorageAccountContainerName": "scripts",
                 "vmScriptsKeyVaultName": "azsudsapstoragekeys",
                 "vmScriptsKeyVaultResourceGroupName": "azsu-rg-sapdevtest-vmstorageaccounts",
-                "vmScriptsKeyVaultSecretName": "storageaccountkey-vmscripts"
+                "vmScriptsKeyVaultSecretName": "azsudsapvmscripts-key1-key"
             },
             "ukwest": {
                 "locationPrefix": "wu",
@@ -205,7 +205,7 @@
                 "vmScriptsStorageAccountContainerName": "scripts",
                 "vmScriptsKeyVaultName": "azwudsapstoragekeys",
                 "vmScriptsKeyVaultResourceGroupName": "azwu-rg-sapdevtest-vmstorageaccounts",
-                "vmScriptsKeyVaultSecretName": "storageaccountkey-vmscripts"
+                "vmScriptsKeyVaultSecretName": "azwudsapvmscripts-key1-key"
             },
             "westeurope": {
                 "locationPrefix": "we",
@@ -214,7 +214,7 @@
                 "vmScriptsStorageAccountContainerName": "scripts",
                 "vmScriptsKeyVaultName": "azwedsapstoragekeys",
                 "vmScriptsKeyVaultResourceGroupName": "azwe-rg-sapdevtest-vmstorageaccounts",
-                "vmScriptsKeyVaultSecretName": "storageaccountkey-vmscripts"
+                "vmScriptsKeyVaultSecretName": "azwedsapvmscripts-key1-key"
             },
             "northeurope": {
                 "locationPrefix": "ne",
@@ -223,7 +223,7 @@
                 "vmScriptsStorageAccountContainerName": "scripts",
                 "vmScriptsKeyVaultName": "aznedsapstoragekeys",
                 "vmScriptsKeyVaultResourceGroupName": "azne-rg-sapdevtest-vmstorageaccounts",
-                "vmScriptsKeyVaultSecretName": "storageaccountkey-vmscripts"
+                "vmScriptsKeyVaultSecretName": "aznedsapvmscripts-key1-key"
             }
         },
         "images": {

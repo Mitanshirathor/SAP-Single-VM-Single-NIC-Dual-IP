@@ -57,21 +57,21 @@
         "osImage": {
             "type": "string",
             "allowedValues": [
-                "Windows Server 2012 Datacenter",
-                "Windows Server 2012 R2 Datacenter",
-                "Windows Server 2016 Datacenter",
+                "RHEL 7.3 BYOS 2018-03-21",
+                "RHEL 7.2",
+                "RHEL 7.3",
                 "SLES SAP 12-SP1",
                 "SLES SAP BYOS 12-SP1",
                 "SLES SAP 12-SP2",
                 "SLES SAP BYOS 12-SP2",
                 "SLES SAP 12-SP3",
                 "SLES SAP BYOS 12-SP3",
-                "RHEL 7.2",
-                "RHEL 7.3",
-                "Oracle Linux 7.2",
-                "RHEL 7.3 BYOS 2018-03-21"
+                "Windows Server 2012 Datacenter",
+                "Windows Server 2012 R2 Datacenter",
+                "Windows Server 2016 Datacenter",
+                "Oracle Linux 7.2"
             ],
-            "defaultValue": "RHEL 7.3",
+            "defaultValue": "RHEL 7.3 BYOS 2018-03-21",
             "metadata": {
                 "description": "The operating system image you want to deploy."
             }
@@ -103,7 +103,6 @@
         },
         "adminPassword": {
             "type": "securestring",
-            "minLength": 12,
             "metadata": {
                 "description": "Password for the Virtual Machine"
             }
@@ -142,14 +141,14 @@
             "type": "string",
             "defaultValue": "",
             "metadata": {
-                "description": "The static IP address of NIC1, IPConfig1, e.g. 10.1.1.4"
+                "description": "The static IP address of NIC1, IPConfig1, e.g. 10.1.1.4. Leave this blank if you wish to use DHCP."
             }
         },
         "ipAddress2": {
             "type": "string",
             "defaultValue": "",
             "metadata": {
-                "description": "The static IP address of NIC1, IPConfig2, e.g. 10.1.1.5"
+                "description": "The static IP address of NIC1, IPConfig2, e.g. 10.1.1.5. Leave this blank if you wish to use DHCP."
             }
         },
         "dnsInternalDomainNameSuffix": {

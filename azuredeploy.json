@@ -566,19 +566,20 @@
         },
         "locationPrefix": "[variables('location')[resourceGroup().location].locationPrefix]",
         "environmentPrefix": "[variables('subscriptionType')[parameters('subscriptionType')].subscriptionTypePrefix]",
-        "prefix": "[concat('az', if(equals(variables('locationPrefix'), ''), 'xx', variables('locationPrefix')),'-',variables('environmentPrefix'),'vsap')]",
+        "prefix": "[concat('az', if(equals(variables('locationPrefix'), ''), 'xx', variables('locationPrefix')),'-',variables('environmentPrefix'),'-sap')]",
         "subnetId": "[concat('/subscriptions/',parameters('subnetSubscriptionId'), '/resourceGroups/', parameters('subnetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('subnetVNETName'), '/subnets/', parameters('subnetName'))]",
         "dataDiskSizes": "[variables('vmSizes')[parameters('sapSystemType')].disks]",
         "acceleratedNetworking": "[variables('vmSizes')[parameters('sapSystemType')].acceleratedNetworking]",
         "dnsInternalDomainNameSuffix": "[toLower(parameters('dnsInternalDomainNameSuffix'))]",
         "vmNumber": "[parameters('vmNumber')]",
         "vmName": "[concat(variables('prefix'),variables('vmNumber'))]",
-        "nicName1": "[concat(variables('prefix'),variables('vmNumber'), '-nic1')]",
+        "nicName1": "[concat(variables('prefix'),variables('vmNumber'), '-nic-01')]",
         "ipAddress1": "[parameters('ipAddress1')]",
         "ipAddress2": "[parameters('ipAddress2')]",
-        "nestedDeploymentName": "nestedTemplate",
-        "nestedDeploymentNameProf": "[concat(variables('nestedDeploymentName'), 'prof')]",
-        "nestedDeploymentNameNIC1": "[concat(variables('nestedDeploymentName'), 'nic1')]",
+        "nestedDeploymentNamePrefix": "nestedTemplate",
+        "nestedDeploymentNameOsDiskConfiguration": "[concat(variables('nestedDeploymentNamePrefix'), 'OsDiskConfiguration')]",
+        "nestedDeploymentNameNic01Configuration": "[concat(variables('nestedDeploymentNamePrefix'), 'Nic01Configuration')]",
+        "nestedDeploymentNameVmDeployment": "[concat(variables('nestedDeploymentNamePrefix'), 'VmDeployment')]",
         "tagCostCodeId": "[parameters('tagCostCodeId')]",
         "tagEnvironment": "[variables('subscriptionType')[parameters('subscriptionType')].tagEnvironment]",
         "tagServiceName": "[variables('vmSizes')[parameters('sapSystemType')].tagServiceName]",
@@ -598,7 +599,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
-            "name": "[variables('nestedDeploymentNameNIC1')]",
+            "name": "[variables('nestedDeploymentNameNic01Configuration')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -621,7 +622,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
-            "name": "[variables('nestedDeploymentNameProf')]",
+            "name": "[variables('nestedDeploymentNameOsDiskConfiguration')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -663,11 +664,11 @@
             "location": "[resourceGroup().location]",
             "tags": "[variables('tags')]",
             "dependsOn": [
-                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNIC1'))]"
+                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNic01Configuration'))]"
             ],
             "properties": {
                 "primary": true,
-                "ipConfigurations": "[reference(variables('nestedDeploymentNameNIC1')).outputs.selectedConfiguration.value.ipConfigurations]",
+                "ipConfigurations": "[reference(variables('nestedDeploymentNameNic01Configuration')).outputs.selectedConfiguration.value.ipConfigurations]",
                 "enableAcceleratedNetworking": "[variables('acceleratedNetworking')]",
                 "dnsSettings": {
                     "internalDomainNameSuffix": "[variables('dnsInternalDomainNameSuffix')]"
@@ -677,9 +678,9 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
-            "name": "[variables('nestedDeploymentName')]",
+            "name": "[variables('nestedDeploymentNameVmDeployment')]",
             "dependsOn": [
-                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameProf'))]",
+                "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameOsDiskConfiguration'))]",
                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName1'))]"
             ],
             "properties": {
@@ -690,10 +691,10 @@
                 },
                 "parameters": {
                     "imageReference": {
-                        "value": "[reference(variables('nestedDeploymentNameProf')).outputs.imageReference.value]"
+                        "value": "[reference(variables('nestedDeploymentNameOsDiskConfiguration')).outputs.imageReference.value]"
                     },
                     "osDisk": {
-                        "value": "[reference(variables('nestedDeploymentNameProf')).outputs.osDisk.value]"
+                        "value": "[reference(variables('nestedDeploymentNameOsDiskConfiguration')).outputs.osDisk.value]"
                     },
                     "osDiskType": {
                         "value": "[variables('osDiskType')]"

@@ -192,19 +192,23 @@
         "location": {
             "uksouth": {
                 "locationPrefix": "su",
-                "vmImageResourceGroup": "azsu-rg-sapdevtest-vmcustomimages"
+                "vmImageResourceGroup": "azsu-rg-sapdevtest-vmcustomimages",
+                "vmDiagnosticsStorageAccountName": "azsudsapvmdiags"
             },
             "ukwest": {
                 "locationPrefix": "wu",
-                "vmImageResourceGroup": "azwu-rg-sapdevtest-vmcustomimages"
+                "vmImageResourceGroup": "azwu-rg-sapdevtest-vmcustomimages",
+                "vmDiagnosticsStorageAccountName": "azwudsapvmdiags"
             },
             "westeurope": {
                 "locationPrefix": "we",
-                "vmImageResourceGroup": "azwe-rg-sapdevtest-vmcustomimages"
+                "vmImageResourceGroup": "",
+                "vmDiagnosticsStorageAccountName": ""
             },
             "northeurope": {
                 "locationPrefix": "ne",
-                "vmImageResourceGroup": "azne-rg-sapdevtest-vmcustomimages"
+                "vmImageResourceGroup": "",
+                "vmDiagnosticsStorageAccountName": ""
             }
         },
         "images": {
@@ -343,10 +347,10 @@
                         "imageName": "azwu-vmimage-redhat-rhel-7.3-byos-2018-03-21"
                     },
                     "westeurope": {
-                        "imageName": "azwe-vmimage-redhat-rhel-7.3-byos-2018-03-21"
+                        "imageName": ""
                     },
                     "northeurope": {
-                        "imageName": "azne-vmimage-redhat-rhel-7.3-byos-2018-03-21"
+                        "imageName": ""
                     }
                 }
             }
@@ -577,6 +581,7 @@
         "dnsInternalDomainNameSuffix": "[toLower(parameters('dnsInternalDomainNameSuffix'))]",
         "vmNumber": "[parameters('vmNumber')]",
         "vmName": "[concat(variables('prefix'),variables('vmNumber'))]",
+        "vmDiagnosticsStorageAccountName": "[variables('location')[resourceGroup().location].vmDiagnosticsStorageAccountName]",
         "nicName1": "[concat(variables('prefix'),variables('vmNumber'), '-nic-01')]",
         "ipAddress1": "[parameters('ipAddress1')]",
         "ipAddress2": "[parameters('ipAddress2')]",
@@ -708,6 +713,9 @@
                     },
                     "vmSize": {
                         "value": "[variables('vmSizes')[parameters('sapSystemType')].size]"
+                    },
+                    "vmDiagnosticsStorageAccountName": {
+                        "value": "[variables('vmDiagnosticsStorageAccountName')]"
                     },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"

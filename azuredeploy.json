@@ -717,7 +717,7 @@
                         "value": "[variables('csExtension')[variables('osType')].scriptCall]"
                     },
                     "csExtensionscriptArgs": {
-                        "value": "[variables('vmSizes')[parameters('sapSystemType')].location[parameters('sapSystemType')]]"
+                        "value": "[variables('vmSizes')[parameters('sapSystemType')].scriptArgs]"
                     },
                     "avSetObj": {
                         "value": {}

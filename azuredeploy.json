@@ -330,6 +330,10 @@
             },
             "RHEL 7.3 BYOS 2018-03-21": {
                 "osDiskType": "userImage",
+                "sku": "",
+                "offer": "",
+                "publisher": "",
+                "version": "",
                 "OSType": "Linux",
                 "imageLocation": {
                     "uksouth": {

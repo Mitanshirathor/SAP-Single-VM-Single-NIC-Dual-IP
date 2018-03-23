@@ -37,6 +37,12 @@
         "description": "Size of the Virtual Machine."
       }
     },
+    "vmDiagnosticsStorageAccountName": {
+        "type": "string",
+        "metadata": {
+            "description": "Name of the Storage Account to use for Virtual Machine Diagnostics."
+        }
+    },
     "adminUsername": {
       "type": "string",
       "metadata": {
@@ -140,6 +146,12 @@
         }
       ]
     },
+    "diagnosticsProfile": {
+        "bootDiagnostics": {
+            "enabled": true,
+            "storageUri": "[concat('http://', parameters('vmDiagnosticsStorageAccountName'), '.blob.core.windows.net')]"
+        }
+    },
     "availableProperties": {
       "image": {
         "availabilitySet": "[variables('internalAVSetObj')]",
@@ -154,7 +166,8 @@
           "osDisk": "[parameters('osDisk')]",
           "dataDisks": "[parameters('dataDisksObj').dataDisks]"
         },
-        "networkProfile": "[variables('networkProfile')]"
+        "networkProfile": "[variables('networkProfile')]",
+        "diagnosticsProfile": "[variables('diagnosticsProfile')]"
       },
       "userImage": {
         "availabilitySet": "[variables('internalAVSetObj')]",
@@ -169,7 +182,8 @@
           "osDisk": "[parameters('osDisk')]",
           "dataDisks": "[parameters('dataDisksObj').dataDisks]"
         },
-        "networkProfile": "[variables('networkProfile')]"
+        "networkProfile": "[variables('networkProfile')]",
+        "diagnosticsProfile": "[variables('diagnosticsProfile')]"
       },
       "osdisk": {
         "availabilitySet": "[variables('internalAVSetObj')]",
@@ -178,7 +192,8 @@
           "osDisk": "[parameters('osDisk')]",
           "dataDisks": "[parameters('dataDisksObj').dataDisks]"
         },
-        "networkProfile": "[variables('networkProfile')]"
+        "networkProfile": "[variables('networkProfile')]",
+        "diagnosticsProfile": "[variables('diagnosticsProfile')]"
       }
     },
     "internalProperties": "[variables('availableProperties')[parameters('osDiskType')]]"

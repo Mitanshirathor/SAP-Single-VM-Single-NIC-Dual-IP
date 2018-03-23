@@ -579,7 +579,6 @@
         "nestedDeploymentName": "nestedTemplate",
         "nestedDeploymentNameProf": "[concat(variables('nestedDeploymentName'), 'prof')]",
         "nestedDeploymentNameNIC1": "[concat(variables('nestedDeploymentName'), 'nic1')]",
-        "osDiskType": "image",
         "tagCostCodeId": "[parameters('tagCostCodeId')]",
         "tagEnvironment": "[variables('subscriptionType')[parameters('subscriptionType')].tagEnvironment]",
         "tagServiceName": "[variables('vmSizes')[parameters('sapSystemType')].tagServiceName]",

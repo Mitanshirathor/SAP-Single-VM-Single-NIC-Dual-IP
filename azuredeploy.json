@@ -54,7 +54,7 @@
                 "description": "Unique VM number (must be 3 digits)"
             }
         },
-        "osType": {
+        "osImage": {
             "type": "string",
             "allowedValues": [
                 "Windows Server 2012 Datacenter",
@@ -68,11 +68,12 @@
                 "SLES SAP BYOS 12-SP3",
                 "RHEL 7.2",
                 "RHEL 7.3",
-                "Oracle Linux 7.2"
+                "Oracle Linux 7.2",
+                "RHEL 7.3 BYOS 2018-03-21"
             ],
             "defaultValue": "RHEL 7.3",
             "metadata": {
-                "description": "The type of the operating system you want to deploy."
+                "description": "The operating system image you want to deploy."
             }
         },
         "sapSystemType": {
@@ -190,20 +191,25 @@
         },
         "location": {
             "uksouth": {
-                "locationPrefix": "su"
+                "locationPrefix": "su",
+                "vmImageResourceGroup": "azsu-rg-sapdevtest-vmcustomimages"
             },
             "ukwest": {
-                "locationPrefix": "wu"
+                "locationPrefix": "wu",
+                "vmImageResourceGroup": "azwu-rg-sapdevtest-vmcustomimages"
             },
             "westeurope": {
-                "locationPrefix": "we"
+                "locationPrefix": "we",
+                "vmImageResourceGroup": "azwe-rg-sapdevtest-vmcustomimages"
             },
             "northeurope": {
-                "locationPrefix": "ne"
+                "locationPrefix": "ne",
+                "vmImageResourceGroup": "azne-rg-sapdevtest-vmcustomimages"
             }
         },
         "images": {
             "Windows Server 2012 Datacenter": {
+                "osDiskType": "image",
                 "sku": "2012-Datacenter",
                 "offer": "WindowsServer",
                 "publisher": "MicrosoftWindowsServer",
@@ -213,6 +219,7 @@
                 "UsePlan": false
             },
             "Windows Server 2012 R2 Datacenter": {
+                "osDiskType": "image",
                 "sku": "2012-R2-Datacenter",
                 "offer": "WindowsServer",
                 "publisher": "MicrosoftWindowsServer",
@@ -222,6 +229,7 @@
                 "UsePlan": false
             },
             "Windows Server 2016 Datacenter": {
+                "osDiskType": "image",
                 "sku": "2016-Datacenter",
                 "offer": "WindowsServer",
                 "publisher": "MicrosoftWindowsServer",
@@ -231,6 +239,7 @@
                 "UsePlan": false
             },
             "SLES SAP 12-SP1": {
+                "osDiskType": "image",
                 "sku": "12-SP1",
                 "offer": "SLES-SAP",
                 "publisher": "SUSE",
@@ -240,6 +249,7 @@
                 "UsePlan": false
             },
             "SLES SAP BYOS 12-SP1": {
+                "osDiskType": "image",
                 "sku": "12-SP1",
                 "offer": "SLES-SAP-BYOS",
                 "publisher": "SUSE",
@@ -249,6 +259,7 @@
                 "UsePlan": false
             },
             "SLES SAP 12-SP2": {
+                "osDiskType": "image",
                 "sku": "12-SP2",
                 "offer": "SLES-SAP",
                 "publisher": "SUSE",
@@ -258,6 +269,7 @@
                 "UsePlan": false
             },
             "SLES SAP BYOS 12-SP2": {
+                "osDiskType": "image",
                 "sku": "12-SP2",
                 "offer": "SLES-SAP-BYOS",
                 "publisher": "SUSE",
@@ -267,6 +279,7 @@
                 "UsePlan": false
             },
             "SLES SAP 12-SP3": {
+                "osDiskType": "image",
                 "sku": "12-SP3",
                 "offer": "SLES-SAP",
                 "publisher": "SUSE",
@@ -276,6 +289,7 @@
                 "UsePlan": false
             },
             "SLES SAP BYOS 12-SP3": {
+                "osDiskType": "image",
                 "sku": "12-SP3",
                 "offer": "SLES-SAP-BYOS",
                 "publisher": "SUSE",
@@ -285,6 +299,7 @@
                 "UsePlan": false
             },
             "RHEL 7.2": {
+                "osDiskType": "image",
                 "sku": "7.2",
                 "offer": "RHEL",
                 "publisher": "RedHat",
@@ -294,6 +309,7 @@
                 "UsePlan": false
             },
             "RHEL 7.3": {
+                "osDiskType": "image",
                 "sku": "7.3",
                 "offer": "RHEL",
                 "publisher": "RedHat",
@@ -303,6 +319,7 @@
                 "UsePlan": false
             },
             "Oracle Linux 7.2": {
+                "osDiskType": "image",
                 "sku": "7.2",
                 "offer": "Oracle-Linux",
                 "publisher": "Oracle",
@@ -310,9 +327,31 @@
                 "OSType": "Linux",
                 "Plan": {},
                 "UsePlan": false
+            },
+            "RHEL 7.3 BYOS 2018-03-21": {
+                "osDiskType": "userImage",
+                "OSType": "Linux",
+                "imageLocation": {
+                    "uksouth": {
+                        "imageName": "azsu-vmimage-redhat-rhel-7.3-byos-2018-03-21"
+                    },
+                    "ukwest": {
+                        "imageName": "azwu-vmimage-redhat-rhel-7.3-byos-2018-03-21"
+                    },
+                    "westeurope": {
+                        "imageName": "azwe-vmimage-redhat-rhel-7.3-byos-2018-03-21"
+                    },
+                    "northeurope": {
+                        "imageName": "azne-vmimage-redhat-rhel-7.3-byos-2018-03-21"
+                    }
+                }
             }
         },
-        "internalOSType": "[variables('images')[parameters('osType')].OSType]",
+        "osType": "[variables('images')[parameters('osImage')].OSType]",
+        "osDiskType": "[variables('images')[parameters('osImage')].osDiskType]",
+        "imageName": "[if(equals(variables('osDiskType'),'userImage'), variables('images')[parameters('osImage')].imageLocation[resourceGroup().location].imageName, '')]",
+        "imageResourceGroup": "[if(equals(variables('osDiskType'),'userImage'), variables('location')[resourceGroup().location].vmImageResourceGroup, '')]",
+        "imageResourceId": "[if(equals(variables('osDiskType'),'userImage'), resourceId(variables('imageResourceGroup'), 'Microsoft.Compute/images', variables('imageName')), '')]",
         "csExtension": {
             "Windows": {
                 "script": "[concat(parameters('_artifactsLocation'), '/shared/configureSAPVM.ps1', parameters('_artifactsLocationSasToken'))]",
@@ -592,19 +631,19 @@
                 },
                 "parameters": {
                     "imageSku": {
-                        "value": "[variables('images')[parameters('osType')].sku]"
+                        "value": "[variables('images')[parameters('osImage')].sku]"
                     },
                     "imagePublisher": {
-                        "value": "[variables('images')[parameters('osType')].publisher]"
+                        "value": "[variables('images')[parameters('osImage')].publisher]"
                     },
                     "imageOffer": {
-                        "value": "[variables('images')[parameters('osType')].offer]"
+                        "value": "[variables('images')[parameters('osImage')].offer]"
                     },
                     "osDiskType": {
                         "value": "[variables('osDiskType')]"
                     },
                     "osType": {
-                        "value": "[variables('internalOSType')]"
+                        "value": "[variables('osType')]"
                     },
                     "vmName": {
                         "value": "[variables('vmName')]"
@@ -613,7 +652,7 @@
                         "value": "Premium_LRS"
                     },
                     "managedDiskId": {
-                        "value": ""
+                        "value": "[variables('imageResourceId')]"
                     }
                 }
             }
@@ -673,13 +712,13 @@
                         "value": "[parameters('adminPassword')]"
                     },
                     "csExtensionScript": {
-                        "value": "[variables('csExtension')[variables('internalOSType')].script]"
+                        "value": "[variables('csExtension')[variables('osType')].script]"
                     },
                     "csExtensionscriptCall": {
-                        "value": "[variables('csExtension')[variables('internalOSType')].scriptCall]"
+                        "value": "[variables('csExtension')[variables('osType')].scriptCall]"
                     },
                     "csExtensionscriptArgs": {
-                        "value": "[variables('vmSizes')[parameters('sapSystemType')].scriptArgs]"
+                        "value": "[variables('vmSizes')[parameters('sapSystemType')].location[parameters('sapSystemType')]]"
                     },
                     "avSetObj": {
                         "value": {}
@@ -704,7 +743,7 @@
                         }
                     },
                     "osType": {
-                        "value": "[variables('internalOSType')]"
+                        "value": "[variables('osType')]"
                     },
                     "tags": {
                         "value": "[variables('tags')]"

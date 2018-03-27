@@ -153,7 +153,7 @@
         },
         "dnsInternalDomainNameSuffix": {
             "type": "string",
-            "defaultValue": "sapdevtest.centrica.com",
+            "defaultValue": "azure.uk.centricaplc.com",
             "metadata": {
                 "description": "The DNS FQDN is constructed by concatenating the VM name with the value of dnsInternalDomainNameSuffix"
             }

@@ -388,7 +388,7 @@
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
                 "acceleratedNetworking": false,
-                "tagServiceName": "BGR & BGS BILLING (SAP)"
+                "tagServiceName": "BGR & BGS - BILLING (SAP)"
             },
             "CRM": {
                 "size": "Standard_E4s_v3",
@@ -408,7 +408,7 @@
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
                 "acceleratedNetworking": false,
-                "tagServiceName": "BGR & BGS CRM (SAP)"
+                "tagServiceName": "BGR & BGS - CRM (SAP)"
             },
             "PIC": {
                 "size": "Standard_D4s_v3",
@@ -448,7 +448,7 @@
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
                 "acceleratedNetworking": false,
-                "tagServiceName": "BGR BILLING BUSINESS WAREHOUSE (SAP)"
+                "tagServiceName": "BGR - BILLING BUSINESS WAREHOUSE (SAP)"
             },
             "MOB": {
                 "size": "Standard_E2s_v3",
@@ -508,7 +508,7 @@
                 ],
                 "scriptArgs": " -DBDataLUNS '0,1' -DBLogLUNS '2'",
                 "acceleratedNetworking": false,
-                "tagServiceName": "SAP IPC"
+                "tagServiceName": "SAP IPC (INTERNET PRICING AND CONFIGURATOR)"
             },
             "CEV": {
                 "size": "Standard_E2s_v3",
